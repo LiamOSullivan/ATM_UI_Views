@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<atm>
+  <soundzone id="0" size="20" xPos="100" yPos="200"/>
+  <soundzone id="1" size="20" xPos="200" yPos="100"/>
+  <soundzone id="2" size="20" xPos="50" yPos="150"/>
+  <soundzone id="3" size="20" xPos="150" yPos="50"/>
+  <soundzone id="4" size="20" xPos="300" yPos="300"/>
+  <mapImage filename="earth-huge.png"/>
+</atm>

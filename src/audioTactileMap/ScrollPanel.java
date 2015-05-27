@@ -44,7 +44,11 @@ import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 /* ScrollPanel.java requires no other files. */
 public class ScrollPanel extends JPanel
@@ -57,28 +61,20 @@ public class ScrollPanel extends JPanel
         Color.red, Color.blue, Color.green, Color.orange,
         Color.cyan, Color.magenta, Color.darkGray, Color.yellow};
     private final int color_n = colors.length;
-
+//ImageIcon ii = new ImageIcon("resources/CampusMap_A4_Print.png", "Map Image");
+    BufferedImage bi;// = new ImageIcon("resources/CampusMap_A4_Print.png", "Map Image");
     public ScrollPanel() {
         
         super(new BorderLayout());
+        loadMapImage();
         
 
-        area = new Dimension(0,0);
-        circles = new Vector<Rectangle>();
-
-//        //Set up the instructions.
-//        JLabel instructionsLeft = new JLabel(
-//                        "Click left mouse button to place a circle.");
-//        JLabel instructionsRight = new JLabel(
-//                        "Click right mouse button to clear drawing area.");
-//        JPanel instructionPanel = new JPanel(new GridLayout(0,1));
-//        instructionPanel.setFocusable(true);
-//        instructionPanel.add(instructionsLeft);
-//        instructionPanel.add(instructionsRight);
+//        area = new Dimension(0,0);
+//        circles = new Vector<Rectangle>();
+//          
 
         //Set up the drawing area.
         drawingPane = new DrawingPane();
-        drawingPane.setBackground(Color.white);
         drawingPane.addMouseListener(this);
 
         //Put the drawing area in a scroll pane.
@@ -89,15 +85,31 @@ public class ScrollPanel extends JPanel
         //add(instructionPanel, BorderLayout.PAGE_START);
         add(scroller, BorderLayout.CENTER);
     }
+    
+    
+        
+    public void loadMapImage(){
+            try{
+            bi = ImageIO.read(new File("C:\\OneDrive\\Projects\\Leicester\\Phase_2\\Code\\NetbeansGUI\\ATMDisplayGUI\\ATM_UI_Views\\src\\resources\\CampusMap_A4_Print.png"));
+            System.out.println("Image loaded: "+"CampusMap_A4_Print.png");
+            }
+            catch(IOException e){
+            System.out.println("Image file not found");
+            }
+    }
 
     /** The component inside the scroll pane. */
     public class DrawingPane extends JPanel {
+         
+       
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             // TODO add background image/ ATM PApplet here
-            
-
-            //Rectangle rect;
+           // ImageIcon ii = new ImageIcon(ImageIO.read("CampusMap_A4_Print.png"));
+           if(bi!=null){
+            g.drawImage(bi, 0, 0, null); 
+           }
+//            Rectangle rect;
 //            for (int i = 0; i < circles.size(); i++) {
 //                rect = circles.elementAt(i);
 //                g.setColor(colors[(i % color_n)]);

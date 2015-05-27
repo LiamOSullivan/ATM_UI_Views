@@ -10,6 +10,7 @@ import java.io.File;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
+import processing.core.*;
 import javax.swing.JTextArea;
 
 /**
@@ -18,23 +19,26 @@ import javax.swing.JTextArea;
  * 
  */
 public class ATMView extends javax.swing.JFrame {
-ATMModel m;    
+ATMModel model;    
+MappletView mapplet;
+
 
     /**
      * Creates new form ATMFrame
      */
     public ATMView(ATMModel m_) {
-        m=m_;
+        model=m_;
+        mapplet = new MappletView();
         initComponents();
-        //initScroll();
+        
+        
     }
 
-//    private void initScroll(){
-//        scrollP = new ScrollPanel();
-//        scrollP.setOpaque(true); //content panes must be opaque
-//        this.setContentPane(scrollP);
-//    
-//    }
+   
+    protected void setMapImage(PImage mi_){
+        //mapImage = mi_;
+        
+    }
     
     public void registerListener(ATMController listener) {
 		//colorList.addListSelectionListener(listener);
@@ -52,7 +56,7 @@ ATMModel m;
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
-        scrollPanel1 = new audioTactileMap.ScrollPanel();
+        jPanel1 = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         FileMenu = new javax.swing.JMenu();
         openMenu = new javax.swing.JMenuItem();
@@ -81,6 +85,17 @@ ATMModel m;
         jScrollPane1.setViewportView(jTextArea1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 527, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 621, Short.MAX_VALUE)
+        );
 
         FileMenu.setText("File");
 
@@ -209,13 +224,17 @@ ATMModel m;
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrollPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(scrollPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 516, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 129, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -331,7 +350,7 @@ ATMModel m;
     static private final String newline = "\n";
     JButton openButton, saveButton;
     JFileChooser fc;
-    JComponent scrollP = new ScrollPanel();
+    //JComponent scrollP = new ScrollPanel();
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu FileMenu;
@@ -346,6 +365,7 @@ ATMModel m;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
@@ -357,7 +377,6 @@ ATMModel m;
     private javax.swing.JMenuItem openMenu;
     private javax.swing.JMenuItem saveMapAsMenuItem;
     private javax.swing.JMenuItem saveMenu;
-    private audioTactileMap.ScrollPanel scrollPanel1;
     private javax.swing.JMenu viewMenu;
     // End of variables declaration//GEN-END:variables
 }

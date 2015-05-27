@@ -4,24 +4,32 @@
  * and open the template in the editor.
  */
 package audioTactileMap;
+import processing.core.*;
 
 /**
  *
  * @author Administrator
  */
-public class ATMController {
-    
-    ATMController(ATMModel m, ATMView v){
-        
-    
+public class ATMController extends PApplet{
+    ATMView view;
+    ATMModel model;
+    ATMController(ATMModel m_, ATMView v_){
+        model=m_;
+        view=v_;    
     }
     
-    void init(){
-        
+//    @Override
+//    void setup(){
+//        
+//    
+//    }
+//    
+//    void draw(){
+//        
+//    
+//    }
     
-    }
-    
-    void getMap(String path_){
+    void loadFile(String path_){
        String p = path_;
        DataAccessController da = new DataAccessController();
        da.loadXML(p);
@@ -30,5 +38,14 @@ public class ATMController {
        //TODO: use a listener to update model AFTER the data has been loaded from XML file.
          
      }
+    
+    private PImage getImage(){
+        PImage mi = loadImage("CampusMap_A4_Print.png");
+    return mi;
+    }
+    
+    private void setViewImage(PImage i){
+        view.setMapImage(i);    
+    }
     
 }
