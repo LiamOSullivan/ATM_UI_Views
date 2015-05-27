@@ -6,20 +6,15 @@
 package audioTactileMap;
 
 /**
- * Reads and writes all ATM model data from/to XML file
+ *
  * @author Administrator
  */
-public class DataAccessController {
-    String path;
+public class SettingsModel {
     
-    DataAccessController(){
-       
-    }
-    void loadXML(String path_){
-        path=path_;        
-    }
-    void getModel(){
-        
+    
+    
+    SettingsModel(){
+                
     }
     
 }

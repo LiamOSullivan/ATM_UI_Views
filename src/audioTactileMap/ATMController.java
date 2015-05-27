@@ -25,7 +25,7 @@ public class ATMController {
        String p = path_;
        DataAccessController da = new DataAccessController();
        da.loadXML(p);
-       m.setModel(da.getModel());
+       //m.setModel(da.getModel());
        
        //TODO: use a listener to update model AFTER the data has been loaded from XML file.
          

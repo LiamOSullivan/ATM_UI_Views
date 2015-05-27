@@ -15,12 +15,8 @@ public class ATMModel {
     
     String mapName = "no map";
     PImage displayImg; //version of map image used for display in GUI
-//    PApplet parentSketch;
-//  PFont mapDisplayFont;
-//  
-//  int w = -1, h =-1; //width and height
-//  String mapDisplay, mapProcess, mapInfo, audioInfo; //Paths to 4*data files
-//  ImageProcessor imgProcessor; //class to process and segment the map image
+    String mapDisplay, mapProcess, mapInfo, audioInfo; //Paths to data files
+    ImageProcessor imgProcessor; //class to process and segment the map image
 //  String audioPath; //path to audio files
 //  MapSoundZone [] envSoundZones, impulseSoundZones; 
 //  SoundManager envSoundManager, impulseSoundManager; //Stores audio files of different types
@@ -63,5 +59,7 @@ public class ATMModel {
     ATMModel(String mapName_){
         mapName=mapName_;
     }
+    
+    
     
 }
