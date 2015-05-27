@@ -20,15 +20,14 @@ import javax.swing.JTextArea;
  */
 public class ATMView extends javax.swing.JFrame {
 
-    ATMModel model;
-
+    ATMController controller;
     MappletView mapplet;
 
     /**
      * Creates new form ATMFrame
      */
-    public ATMView(ATMModel m_) {
-        model = m_;
+    public ATMView() {
+        
         initComponents(); //menus etc.
         mapplet = new MappletView(); //PApplet to embed in JPanel of ATMView
         mapplet.init();
@@ -36,7 +35,8 @@ public class ATMView extends javax.swing.JFrame {
 
     }
 
-    public void registerListener(ATMController listener) {
+    public void registerListener(ATMController c_) {
+        controller = c_;
         //colorList.addListSelectionListener(listener);
         //mousePanel.addMouseMotionListener(listener);
     }
@@ -265,20 +265,20 @@ public class ATMView extends javax.swing.JFrame {
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();
-            //This is where a real application would open the file.
-            System.out.println("Opening: " + file.getName() + "." + newline);
-            fc.getSelectedFile().getName();
+            System.out.println("View Opening: " + file.getName());
+            controller.loadFile(file);
             //sending the selectedFile to loadBgImage() in the PApplet
-            mapplet.loadMapImage(fc.getSelectedFile());
+            //mapplet.loadMapImage(fc.getSelectedFile());           
+            
         } else {
-            System.out.println("Open command cancelled by user." + newline);
+            System.out.println("Open command cancelled by user.");
         }
 
     }//GEN-LAST:event_openMenuActionPerformed
 
     private void exitMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuActionPerformed
         // TODO Add confirm save/exit dialog if map has been modified
-        System.out.println("Exit command - closing application." + newline);
+        System.out.println("Exit command - closing application.");
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 
     }//GEN-LAST:event_exitMenuActionPerformed

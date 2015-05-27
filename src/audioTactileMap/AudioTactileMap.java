@@ -45,7 +45,7 @@ public class AudioTactileMap {
             public void run() {
                 
                 ATMModel atmModel = new ATMModel();
-                ATMView atmView = new ATMView(atmModel);
+                ATMView atmView = new ATMView();
                 //SettingsView
                 
                 ATMController atmController = new ATMController(atmModel, atmView);

@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package audioTactileMap;
+import java.io.File;
 import processing.core.*;
 
 /**
@@ -29,12 +30,13 @@ public class ATMController extends PApplet{
 //    
 //    }
     
-    void loadFile(String path_){
-       String p = path_;
+    void loadFile(File f_){
+        
+       File file = f_;
+       System.out.println("Controller Opening: " + file.getName());
        DataAccessController da = new DataAccessController();
-       da.loadXML(p);
-       //m.setModel(da.getModel());
-       
+       da.loadFile(file);
+       //m.setModel(da.getModel());       
        //TODO: use a listener to update model AFTER the data has been loaded from XML file.
          
      }
