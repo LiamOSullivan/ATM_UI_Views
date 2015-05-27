@@ -31,18 +31,17 @@ public class DataAccessController extends PApplet{
 
     void loadFile(File f_) {
         file = f_;
-        fileName = file.getName();
+        fileName = file.getAbsolutePath();
         System.out.println("DAO Opening: " + fileName); 
         xml = loadXML(fileName);
-        
-//        //parse map image data
-//        imageElement = xml.getChildren("mapImage");
-//        imageFileName = imageElement[0].getString("filename");
-//        System.out.println("Image file from xml: " + imageFileName);
-//
-//        //parse soundzone data
-//        soundzones = xml.getChildren("soundzone");
-//        System.out.println("There are " + soundzones.length + " children with tag 'soundzone'");
+        //parse map image data
+        imageElement = xml.getChildren("mapImage");
+        imageFileName = imageElement[0].getString("filename");
+        System.out.println("Image file from xml: " + imageFileName);
+
+      //parse soundzone data
+      soundzones = xml.getChildren("soundzone");
+      System.out.println("There are " + soundzones.length + " children with tag 'soundzone'");
         //sounds = new SoundZone[soundzones.length];
 //        for (int i = 0; i < soundzones.length; i++) {
 //            System.out.println("soundzone #" + i);
