@@ -45,7 +45,7 @@ public class ATMController extends PApplet{
     }
     
     private void setViewImage(PImage i){
-        view.setMapImage(i);    
+        //view.setMapImage(i);    
     }
     
 }

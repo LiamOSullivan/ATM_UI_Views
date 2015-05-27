@@ -24,8 +24,8 @@ import javax.imageio.ImageIO;
 public class MappletView extends PApplet implements ActionListener {
 
     PImage bgImg = null;
-    
     int w,h;
+    PFont font;
 
     MappletView() {
 
@@ -33,19 +33,21 @@ public class MappletView extends PApplet implements ActionListener {
 
     @Override
     public void setup() {
-        size(w, h);
-
+        size(800, 600);
+        font = createFont("CourierNewPSMT-48.vlw", 48);
+        textFont(font, 24);
+        fill(0);
     }
 
     @Override
     public void draw() {
-
         //check if the background image is already loaded
         //if not, the background is painted white
         if (bgImg == null) {
             background(255);
+            text("Please choose a map from File > Open Map...", 12, height/2);
         } else {
-            image(bgImg, 0, 0, width, height);
+            image(bgImg, 0, 0, this.width, this.height);
         }
 
     }
@@ -69,7 +71,12 @@ public class MappletView extends PApplet implements ActionListener {
      */
 
     public void loadMapImage(File selectedFile) {
+        String absPath =selectedFile.getAbsolutePath();
+        
+        System.out.println("Mapplet trying "+absPath);
         bgImg = loadImage(selectedFile.getAbsolutePath());
+        
+        
     }
 
     //    
