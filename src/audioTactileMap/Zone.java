@@ -17,14 +17,24 @@ class Zone {
   PApplet parent;
   String name, info;
   int zoneID, zoneLabel;
+  PVector loc;
+  int size =-1;
   //AudioSnippet nameAudio, infoAudio;
 
+  Zone(int i_, PVector p_, int s_) {
+    zoneID = i_;
+    loc = p_;
+    size=s_;
+  }
+  
   Zone(PApplet p_, int id_) {
     parent = p_;
     zoneID = id_;
     name= "N/A";
     info= "N/A";
   }
+  
+  
 
   void setId(int id_) {
     zoneID=id_;

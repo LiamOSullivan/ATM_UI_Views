@@ -18,7 +18,8 @@ class MapSoundZone {
   int index; 
   PVector loc;
   float size =20;
-
+  String filePath = "null";
+  
   MapSoundZone() {
     index=-1; //no index at instantiation
     loc = new PVector(-1, -1); //no location
@@ -33,6 +34,21 @@ class MapSoundZone {
     index = i_;
     loc = p_;
   }
+  
+  MapSoundZone(int i_, PVector p_, int s_) {
+    index = i_;
+    loc = p_;
+    size = s_;
+  }
+  
+  MapSoundZone(int i_, PVector p_, int s_, String f_) {
+    index = i_;
+    loc = p_;
+    size = s_;
+    filePath = f_;
+    
+  }
+  
 
   void setIndex(int i_) {
     index = i_;

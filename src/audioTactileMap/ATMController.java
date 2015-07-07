@@ -34,20 +34,19 @@ public class ATMController extends PApplet{
         
        File file = f_;
        System.out.println("Controller Opening: " + file.getName());
-       DataAccessController da = new DataAccessController();
-       da.loadFile(file);
-       //m.setModel(da.getModel());       
+       model.loadFile(file);
+       //model.set(da.getModel()); //get the data loaded by the DAC and put in model       
        //TODO: use a listener to update model AFTER the data has been loaded from XML file.
          
      }
     
-    private PImage getImage(){
-        PImage mi = loadImage("CampusMap_A4_Print.png");
-    return mi;
-    }
-    
-    private void setViewImage(PImage i){
-        //view.setMapImage(i);    
-    }
+//    private PImage getImage(){
+//        PImage mi = loadImage("CampusMap_A4_Print.png");
+//    return mi;
+//    }
+//    
+//    private void setViewImage(PImage i){
+//        //view.setMapImage(i);    
+//    }
     
 }
