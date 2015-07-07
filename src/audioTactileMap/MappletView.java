@@ -24,8 +24,10 @@ import javax.imageio.ImageIO;
 public class MappletView extends PApplet implements ActionListener {
 
     PImage bgImg = null;
-    int w,h;
+    int w, h;
     PFont font;
+    MapSoundZone[] msz;
+    boolean isMapLoaded = false;
 
     MappletView() {
 
@@ -41,15 +43,17 @@ public class MappletView extends PApplet implements ActionListener {
 
     @Override
     public void draw() {
-        //check if the background image is already loaded
-        //if not, the background is painted white
-        if (bgImg == null) {
-            background(255);
-            text("Please choose a map from File > Open Map...", 12, height/2);
-        } else {
-            image(bgImg, 0, 0, this.width, this.height);
-        }
+        if (isMapLoaded) {
+           if (bgImg != null) {
+                image(bgImg, 0, 0, this.width, this.height);
+            }
+            drawSoundZones();
 
+        } else {
+            //if map not loaded, the background is painted white w/ message
+            background(255);
+            text("Please choose a map from File > Open Map...", 12, height / 2);
+        }
     }
 
     /**
@@ -66,28 +70,31 @@ public class MappletView extends PApplet implements ActionListener {
     }
 
     /**
-     * this method is called by the ActionListener assigned to the JButton
-     * buttonLoad in Application
+     * methods to set the background map image and pass a reference to zones.
      */
+       
+    public void setMapLoaded(boolean b_) {
+        isMapLoaded = b_;
 
-    public void loadMapImage(File selectedFile) {
-        String absPath =selectedFile.getAbsolutePath();
-        
-        System.out.println("Mapplet trying "+absPath);
-        bgImg = loadImage(selectedFile.getAbsolutePath());
-        
-        
     }
 
-    //    
-//    public void getImageFile(){
-//            try{
-//            bi = ImageIO.read(new File("C:\\OneDrive\\Projects\\Leicester\\Phase_2\\Code\\NetbeansGUI\\ATMDisplayGUI\\ATM_UI_Views\\src\\resources\\CampusMap_A4_Print.png"));
-//            System.out.println("Image loaded: "+"CampusMap_A4_Print.png");
-//            }
-//            catch(IOException e){
-//            System.out.println("Image file not found");
-//            }
-//    }
+    public void setMapImage(String f_) {
+
+        //System.out.println("Mapplet trying " + f_);
+        bgImg = loadImage(f_);
+    }
+
+    public void setSoundZones(MapSoundZone[] m_) {
+        msz = m_;
+    }
+
+    /**
+     * real-time drawing methods 
+     */
     
+    private void drawSoundZones() {
+        for (int i = 0; i < msz.length; i += 1) {
+            ellipse(msz[i].getLocation().x, msz[i].getLocation().y, msz[i].getSize(), msz[i].getSize());
+        }
+    }
 }

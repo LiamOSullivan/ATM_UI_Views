@@ -22,6 +22,7 @@ public class ATMView extends javax.swing.JFrame {
 
     ATMController controller;
     MappletView mapplet;
+    
 
     /**
      * Creates new form ATMFrame
@@ -33,6 +34,14 @@ public class ATMView extends javax.swing.JFrame {
         mapplet.init();
         jPanel1.add(mapplet);
 
+    }
+    
+    public void updateMap(){
+        mapplet.setMapImage(controller.getImagePath());
+        mapplet.setSoundZones(controller.getSoundZones());
+        mapplet.setMapLoaded(true);
+        
+    
     }
 
     public void registerListener(ATMController c_) {

@@ -35,10 +35,22 @@ public class ATMController extends PApplet{
        File file = f_;
        System.out.println("Controller Opening: " + file.getName());
        model.loadFile(file);
+       view.updateMap(); //tells the view to update the ATM based on data in model
+       
        //model.set(da.getModel()); //get the data loaded by the DAC and put in model       
        //TODO: use a listener to update model AFTER the data has been loaded from XML file.
          
      }
+    
+    public String getImagePath(){
+    return model.getImageFilePath();    
+    }
+    public MapSoundZone [] getSoundZones(){
+    return model.getSoundZones();  
+    
+    }
+    
+    
     
 //    private PImage getImage(){
 //        PImage mi = loadImage("CampusMap_A4_Print.png");

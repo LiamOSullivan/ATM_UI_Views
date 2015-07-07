@@ -29,21 +29,20 @@ public class ATMModel extends PApplet {
     XML[] settingsElement;
     XML[] ipElement;
     XML[] pathElement;//default directory path (e.g. in "My Documents");
-    
-    String imageFileName = "No image loaded";
+
+    String imageFileName = "No image loaded", imageFilePath = "null";
     String mapName = "No map loaded";
     //PImage mapDisplayImg; //version of map image used for display in GUI
     //String mapDisplayPath;//, mapProcess, mapInfo, audioInfo; //Paths to data files
     PImage bg;
-    MapSoundZone[] soundZones;
+    public MapSoundZone[] soundZones;
     String localIPString = "null";
     String defaultDir = "null";
     String soundDir = "null"; //path to audio files
     String imageDir = "null";
-    
+
     ImageProcessor imgProcessor; //class to process and segment the map image
 
-  
 //  MapSoundZone [] envSoundZones, impulseSoundZones; 
 //  SoundManager envSoundManager, impulseSoundManager; //Stores audio files of different types
 //  AudioPlayer [] ttsReplace;// ***TODO: create SoundManager for this
@@ -83,11 +82,12 @@ public class ATMModel extends PApplet {
     ATMModel(String mapName_) {
         mapName = mapName_;
     }
+//TODO: catch all file load/ NPE errors
 
     void loadFile(File f_) {
         file = f_;
         filePath = file.getAbsolutePath();
-        fileDir = filePath.substring(0,filePath.lastIndexOf(File.separator));
+        fileDir = filePath.substring(0, filePath.lastIndexOf(File.separator));
         System.out.println("Model is opening file: " + filePath);
         xml = loadXML(filePath);
         //parse map data...
@@ -96,7 +96,7 @@ public class ATMModel extends PApplet {
         //get top-level elements
         println("Top Level Elements in xml file: ");
         if (xml.hasChildren()) {
-            
+
             //get settings
             settingsElement = xml.getChildren("settings");
             println("Found " + settingsElement.length + " 'settings' element");
@@ -116,7 +116,8 @@ public class ATMModel extends PApplet {
             imageElement = xml.getChildren("mapImage");
             imageFileName = imageElement[0].getString("filename");
             System.out.println("Image file from xml: " + imageFileName);
-            
+            imageFilePath = fileDir + imageDir + imageFileName;
+
             //get soundZones data and instantiate MapSoundZone objects in array
             soundZonesElement = xml.getChildren("soundzones");
             println("There are " + soundZonesElement.length + " children with tag 'soundzones'");
@@ -130,16 +131,25 @@ public class ATMModel extends PApplet {
                 int xPos = soundZoneElement[i].getInt("xPos");
                 int yPos = soundZoneElement[i].getInt("yPos");
                 String f = soundZoneElement[i].getString("file");
-                System.out.print("\t pos: " + xPos + ", " + yPos+"\t uses file "+f);
-                String soundPath = ""+fileDir+soundDir+f;
-                System.out.println("fulle path: "+soundPath);
-                soundZones[i] = new MapSoundZone(i, new PVector(xPos, yPos), size, soundPath);               
-                
+                System.out.print("\t pos: " + xPos + ", " + yPos + "\t uses file " + f);
+                String soundPath = "" + fileDir + soundDir + f;
+                System.out.println("fulle path: " + soundPath);
+                soundZones[i] = new MapSoundZone(i, new PVector(xPos, yPos), size, soundPath);
+
             }
         }
     }
-//TODO: accessor methods as required
 
+    //    public void getImageFile(){
+//            try{
+//            bi = ImageIO.read(new File("C:\\OneDrive\\Projects\\Leicester\\Phase_2\\Code\\NetbeansGUI\\ATMDisplayGUI\\ATM_UI_Views\\src\\resources\\CampusMap_A4_Print.png"));
+//            System.out.println("Image loaded: "+"CampusMap_A4_Print.png");
+//            }
+//            catch(IOException e){
+//            System.out.println("Image file not found");
+//            }
+//    }
+//TODO: accessor methods as required
     boolean hasImage() {
         if (bg != null) {
             return true;
@@ -147,5 +157,13 @@ public class ATMModel extends PApplet {
             return false;
         }
 
+    }
+
+    String getImageFilePath() {
+        return imageFilePath;
+    }
+
+    public MapSoundZone[] getSoundZones() {
+        return soundZones;
     }
 }
