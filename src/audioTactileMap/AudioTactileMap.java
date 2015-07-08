@@ -6,11 +6,14 @@
 package audioTactileMap;
 import javax.swing.JFrame;
 
+
 /**
  *
  * @author Administrator
  */
 public class AudioTactileMap {
+
+    
  
     /**
      * @param args the command line arguments
@@ -49,6 +52,7 @@ public class AudioTactileMap {
                 //SettingsView
                 
                 ATMController atmController = new ATMController(atmModel, atmView);
+                
                 SettingsController settingsC = new SettingsController();
                 
                 atmController.init();

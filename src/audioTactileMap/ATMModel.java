@@ -96,46 +96,52 @@ public class ATMModel extends PApplet {
         //get top-level elements
         println("Top Level Elements in xml file: ");
         if (xml.hasChildren()) {
-
             //get settings
             settingsElement = xml.getChildren("settings");
             println("Found " + settingsElement.length + " 'settings' element");
+            if (settingsElement.length > 0) {
             ipElement = settingsElement[0].getChildren("oscaddress");
             localIPString = ipElement[0].getString("ip");
             println("Local IP address is " + localIPString);
             //TODO: get IP address of network adapter, not from xml
             //get path data
-            pathElement = settingsElement[0].getChildren("path");
-            defaultDir = pathElement[0].getString("defaultdir");
-            soundDir = pathElement[0].getString("sounddir");
-            imageDir = pathElement[0].getString("imagedir");
-            println("Default directory is " + defaultDir);
-            println("Sound directory is " + soundDir);
-            println("Image directory is " + imageDir);
+            
+                pathElement = settingsElement[0].getChildren("path");
+                defaultDir = pathElement[0].getString("defaultdir");
+                soundDir = pathElement[0].getString("sounddir");
+                imageDir = pathElement[0].getString("imagedir");
+                println("Default directory is " + defaultDir);
+                println("Sound directory is " + soundDir);
+                println("Image directory is " + imageDir);
+            }
             //get image data
             imageElement = xml.getChildren("mapImage");
-            imageFileName = imageElement[0].getString("filename");
-            System.out.println("Image file from xml: " + imageFileName);
-            imageFilePath = fileDir + imageDir + imageFileName;
+            if (imageElement.length > 0) {
+                imageFileName = imageElement[0].getString("filename");
+                System.out.println("Image file from xml: " + imageFileName);
+                imageFilePath = fileDir + imageDir + imageFileName;
+            }
 
             //get soundZones data and instantiate MapSoundZone objects in array
             soundZonesElement = xml.getChildren("soundzones");
             println("There are " + soundZonesElement.length + " children with tag 'soundzones'");
-            soundZoneElement = soundZonesElement[0].getChildren("soundzone");
-            println("There are " + soundZoneElement.length + " children with tag 'soundzone'");
-            soundZones = new MapSoundZone[soundZoneElement.length];
-            for (int i = 0; i < soundZones.length; i++) {
-                System.out.print("soundzone #" + i);
-                int size = soundZoneElement[i].getInt("size");
-                System.out.print("\t size: " + size);
-                int xPos = soundZoneElement[i].getInt("xPos");
-                int yPos = soundZoneElement[i].getInt("yPos");
-                String f = soundZoneElement[i].getString("file");
-                System.out.print("\t pos: " + xPos + ", " + yPos + "\t uses file " + f);
-                String soundPath = "" + fileDir + soundDir + f;
-                System.out.println("fulle path: " + soundPath);
-                soundZones[i] = new MapSoundZone(i, new PVector(xPos, yPos), size, soundPath);
+            if (soundZonesElement.length > 0) {
+                soundZoneElement = soundZonesElement[0].getChildren("soundzone");
+                println("There are " + soundZoneElement.length + " children with tag 'soundzone'");
+                soundZones = new MapSoundZone[soundZoneElement.length];
+                for (int i = 0; i < soundZones.length; i++) {
+                    System.out.print("soundzone #" + i);
+                    int size = soundZoneElement[i].getInt("size");
+                    System.out.print("\t size: " + size);
+                    int xPos = soundZoneElement[i].getInt("xPos");
+                    int yPos = soundZoneElement[i].getInt("yPos");
+                    String f = soundZoneElement[i].getString("file");
+                    System.out.println("\t pos: " + xPos + ", " + yPos + "\t uses file '" + f + "' ");
+                    String soundPath = "" + fileDir + soundDir + f;
+                    System.out.println("Full path: " + soundPath);
+                    soundZones[i] = new MapSoundZone(i, new PVector(xPos, yPos), size, soundPath);
 
+                }
             }
         }
     }

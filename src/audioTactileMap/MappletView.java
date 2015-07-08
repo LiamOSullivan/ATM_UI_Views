@@ -6,6 +6,7 @@
 package audioTactileMap;
 
 import processing.core.*;
+import ddf.minim.*;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,6 +29,7 @@ public class MappletView extends PApplet implements ActionListener {
     PFont font;
     MapSoundZone[] msz;
     boolean isMapLoaded = false;
+    Minim minim;
 
     MappletView() {
 
@@ -39,12 +41,13 @@ public class MappletView extends PApplet implements ActionListener {
         font = createFont("CourierNewPSMT-48.vlw", 48);
         textFont(font, 24);
         fill(0);
+        
     }
 
     @Override
     public void draw() {
         if (isMapLoaded) {
-           if (bgImg != null) {
+            if (bgImg != null) {
                 image(bgImg, 0, 0, this.width, this.height);
             }
             drawSoundZones();
@@ -56,6 +59,7 @@ public class MappletView extends PApplet implements ActionListener {
         }
     }
 
+    //TODO: remove action listener if unused
     /**
      * implementation from interface ActionListener method is called from the
      * Application the String being compared is the ActionCommand from the
@@ -72,7 +76,6 @@ public class MappletView extends PApplet implements ActionListener {
     /**
      * methods to set the background map image and pass a reference to zones.
      */
-       
     public void setMapLoaded(boolean b_) {
         isMapLoaded = b_;
 
@@ -89,12 +92,61 @@ public class MappletView extends PApplet implements ActionListener {
     }
 
     /**
-     * real-time drawing methods 
+     * real-time drawing methods
      */
-    
     private void drawSoundZones() {
         for (int i = 0; i < msz.length; i += 1) {
-            ellipse(msz[i].getLocation().x, msz[i].getLocation().y, msz[i].getSize(), msz[i].getSize());
+            ellipse(msz[i].getZonePosition().x, msz[i].getZonePosition().y, 
+            msz[i].getZoneSize(), msz[i].getZoneSize());
         }
+    }
+
+    private void playSound(int i_) {
+        //Check if a MapSoundZone is playing, pause, rewind and play new sound
+        int index = i_;
+        int playingID = -1;
+        boolean playing = false;
+        //find the index of sound currently playing
+        for (int i = 0; i < msz.length; i += 1) {
+            System.out.println("check if playing #" + i);
+            if (msz[i].checkIfPlaying()) {
+                System.out.println("sound playing is #" + i);
+                playingID = i;
+                playing = true;
+                break;
+            } else {
+                System.out.println("file # " + i + " isn't playing");
+            }
+        }
+        //if trying to play a different sound, pause the current playing sound
+        if (playing) {
+            if (index != playingID) {
+                System.out.println("Stopping sound: " + playingID);
+                msz[playingID].pauseSound();
+                msz[playingID].rewindSound();
+                System.out.println("And playing sound: " + index);
+                msz[index].playSound(); //play the new sound
+                msz[index].rewindSound();
+            }
+        } else {
+            System.out.println("SoundManager trying to play # " + index);
+            msz[index].playSound(); //play the sound
+            msz[index].rewindSound();
+        }
+
+    }
+
+    /*
+     * mouse listeners
+     */
+    @Override
+    public void mouseClicked() {
+        for (int i = 0; i < msz.length; i += 1) {
+            if (msz[i].checkIfOver(mouseX, mouseY)) {
+                println("Over soundZone #" + msz[i].getIndex());
+                playSound(i);
+            }
+        }
+
     }
 }
