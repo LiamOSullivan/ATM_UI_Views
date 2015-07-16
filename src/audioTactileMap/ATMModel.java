@@ -38,7 +38,9 @@ public class ATMModel extends PApplet {
     public MapSoundZone[] soundZones;
     String localIPString = "null";
     String defaultDir = "null";
-    String soundDir = "null"; //path to audio files
+    String envSoundDir = "null"; //path to audio files
+    String spokenSoundDir = "null"; //path to audio files
+    String selfSoundDir = "null"; 
     String imageDir = "null";
 
     ImageProcessor imgProcessor; //class to process and segment the map image
@@ -108,10 +110,14 @@ public class ATMModel extends PApplet {
             
                 pathElement = settingsElement[0].getChildren("path");
                 defaultDir = pathElement[0].getString("defaultdir");
-                soundDir = pathElement[0].getString("sounddir");
+                envSoundDir = pathElement[0].getString("envsounddir");
+                spokenSoundDir = pathElement[0].getString("spokensounddir");
+                selfSoundDir = pathElement[0].getString("selfsounddir");
                 imageDir = pathElement[0].getString("imagedir");
                 println("Default directory is " + defaultDir);
-                println("Sound directory is " + soundDir);
+                println("Environment Sound directory is " + envSoundDir);
+                println("Self-produced Sound directory is " + selfSoundDir);
+                println("Spoken Information Sound directory is " + spokenSoundDir);
                 println("Image directory is " + imageDir);
             }
             //get image data
@@ -137,9 +143,9 @@ public class ATMModel extends PApplet {
                     int yPos = soundZoneElement[i].getInt("yPos");
                     String f = soundZoneElement[i].getString("file");
                     System.out.println("\t pos: " + xPos + ", " + yPos + "\t uses file '" + f + "' ");
-                    String soundPath = "" + fileDir + soundDir + f;
-                    System.out.println("Full path: " + soundPath);
-                    soundZones[i] = new MapSoundZone(i, new PVector(xPos, yPos), size, soundPath);
+                    String envSP = "" + fileDir + envSoundDir + f;
+                    System.out.println("Full path: " + envSP);
+                    soundZones[i] = new MapSoundZone(i, new PVector(xPos, yPos), size, envSP);
 
                 }
             }

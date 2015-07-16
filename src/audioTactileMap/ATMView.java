@@ -35,7 +35,7 @@ public class ATMView extends javax.swing.JFrame {
         jPanel1.add(mapplet);
 
     }
-    
+    //called by ATMController after it has loaded an ATMModel
     public void updateMap(){
         mapplet.setMapImage(controller.getImagePath());
         mapplet.setSoundZones(controller.getSoundZones());

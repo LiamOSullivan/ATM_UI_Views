@@ -24,7 +24,7 @@ import javax.imageio.ImageIO;
  */
 public class MappletView extends PApplet implements ActionListener {
 
-    PImage bgImg = null;
+    PImage mapImg = null;
     int w, h;
     PFont font;
     MapSoundZone[] msz;
@@ -47,8 +47,8 @@ public class MappletView extends PApplet implements ActionListener {
     @Override
     public void draw() {
         if (isMapLoaded) {
-            if (bgImg != null) {
-                image(bgImg, 0, 0, this.width, this.height);
+            if (mapImg != null) {
+                image(mapImg, 0, 0, this.width, this.height);
             }
             drawSoundZones();
 
@@ -84,7 +84,8 @@ public class MappletView extends PApplet implements ActionListener {
     public void setMapImage(String f_) {
 
         //System.out.println("Mapplet trying " + f_);
-        bgImg = loadImage(f_);
+        mapImg = loadImage(f_);
+        size(mapImg.width, mapImg.height ); 
     }
 
     public void setSoundZones(MapSoundZone[] m_) {

@@ -53,10 +53,10 @@ public class AudioTactileMap {
                 
                 ATMController atmController = new ATMController(atmModel, atmView);
                 
-                SettingsController settingsC = new SettingsController();
+                //SettingsController settingsC = new SettingsController();
                 
                 atmController.init();
-                settingsC.init();
+                //settingsC.init();
                 
                 atmView.registerListener(atmController);
                 atmView.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
