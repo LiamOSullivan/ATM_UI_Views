@@ -26,6 +26,8 @@ public class ATMModel extends PApplet {
     XML[] imageElement;
     XML[] soundZonesElement;
     XML[] soundZoneElement; //nested in 'soundzones'
+    XML[] zonesElement;
+    XML[] zoneElement; //nested in 'zones'
     XML[] settingsElement;
     XML[] ipElement;
     XML[] pathElement;//default directory path (e.g. in "My Documents");
@@ -36,11 +38,12 @@ public class ATMModel extends PApplet {
     //String mapDisplayPath;//, mapProcess, mapInfo, audioInfo; //Paths to data files
     PImage bg;
     public MapSoundZone[] soundZones;
+    public Zone[] zones;
     String localIPString = "null";
     String defaultDir = "null";
     String envSoundDir = "null"; //path to audio files
     String spokenSoundDir = "null"; //path to audio files
-    String selfSoundDir = "null"; 
+    String selfSoundDir = "null";
     String imageDir = "null";
 
     ImageProcessor imgProcessor; //class to process and segment the map image
@@ -102,12 +105,12 @@ public class ATMModel extends PApplet {
             settingsElement = xml.getChildren("settings");
             println("Found " + settingsElement.length + " 'settings' element");
             if (settingsElement.length > 0) {
-            ipElement = settingsElement[0].getChildren("oscaddress");
-            localIPString = ipElement[0].getString("ip");
-            println("Local IP address is " + localIPString);
+                ipElement = settingsElement[0].getChildren("oscaddress");
+                localIPString = ipElement[0].getString("ip");
+                println("Local IP address is " + localIPString);
             //TODO: get IP address of network adapter, not from xml
-            //get path data
-            
+                //get path data
+
                 pathElement = settingsElement[0].getChildren("path");
                 defaultDir = pathElement[0].getString("defaultdir");
                 envSoundDir = pathElement[0].getString("envsounddir");
@@ -146,6 +149,36 @@ public class ATMModel extends PApplet {
                     String envSP = "" + fileDir + envSoundDir + f;
                     System.out.println("Full path: " + envSP);
                     soundZones[i] = new MapSoundZone(i, new PVector(xPos, yPos), size, envSP);
+
+                }
+            }
+            //get Zones data (buildings, areas) and instantiate Zone objects in array
+            zonesElement = xml.getChildren("zones");
+            println("There are " + zonesElement.length + " children with tag 'zones'");
+            if (zonesElement.length > 0) {
+                zoneElement = zonesElement[0].getChildren("zone");
+                println("There are " + zoneElement.length + " children with tag 'zone'");
+                zones = new Zone[zoneElement.length];
+                for (int i = 0; i < zones.length; i++) {
+                    System.out.print("zone #" + i);
+                    int label = zoneElement[i].getInt("label");
+                    System.out.print("\t expected label: " + label);
+                    String name = zoneElement[i].getString("name");
+                    System.out.println("\t name: " + name);
+                    String info = zoneElement[i].getString("info");
+                    System.out.println("Zone info: " + info);
+                    String f = zoneElement[i].getString("audiofile");
+                    if (!f.equals("null")) {
+                        System.out.println("This zone has an associated audio file: " + f);
+                        //Zone(int i_, int l_, String n_, String info_, String audiofile)
+                    zones[i] = new Zone(i, label, name, info, f);
+                    } else {
+                        System.out.println("This zone has no associated audio file");
+                        //Zone(int i_, int l_, String n_, String info_)
+                    zones[i] = new Zone(i, label, name, info);
+                    }
+                    System.out.println("***");
+                    
 
                 }
             }
