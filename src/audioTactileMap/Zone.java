@@ -9,80 +9,109 @@ package audioTactileMap;
  *
  * @author Administrator
  */
-
 import processing.core.*;
 import ddf.minim.*;
+import java.io.File;
 
 class Zone {
-  PApplet parent;
-  String name, info, nameAudioFile;
-  int zoneID, zoneLabel;
-  PVector loc;
-  int size =-1;
-  
-  AudioPlayer nameAudio;
 
-  Zone(int i_, PVector p_, int s_) {
-    zoneID = i_;
-    loc = p_;
-    size=s_;
-  }
-  
-  //Constructor for zones containing building or location information.
-  Zone(int i_, int l_, String n_, String info_) {
-    zoneID = i_;
-    zoneLabel = l_;
-    name = n_;
-    info = info_;    
-  }
-  
-  //Constructor for zones containing building or location information and an associated verbalised audio file.
-  Zone(int i_, int l_, String n_, String info_, String na_) {
-    zoneID = i_;
-    zoneLabel = l_;
-    name = n_;
-    info = info_; 
-    nameAudioFile = na_;
-  }
-  
-  Zone(PApplet p_, int id_) {
-    parent = p_;
-    zoneID = id_;
-    name= "N/A";
-    info= "N/A";
-  }
-  
-  
+    PApplet parent; //parent class is model and extends PApplet
+    String sound1File, sound2File;
+    Minim minim;
+    AudioPlayer sound1, sound2;
+        
+    int zoneID;
 
-  void setId(int id_) {
-    zoneID=id_;
-  }
-  
-  void setLabel(int l_) {
-    zoneLabel=l_;
-  }
+    //Constructor for zones containing building or location information.
+    Zone(PApplet p_, int i_, String s1_, String s2_) {
+        parent = p_;
+        zoneID = i_;
+        sound1File  = s1_;
+        sound2File  = s2_;
+        minim = new Minim(parent);
+        
+         System.out.println("Zone #" + zoneID + " checking for audio file...");
+//        if ("none".equals(sound1File)) {
+//            System.out.println("No associated audio file found for building name. ");
+//
+//        } else {
+//            System.out.println("Zone #" + zoneID + " loading audio file: " + sound1File);
+//            minim = new Minim(parent);
+//            sound1 = minim.loadFile(sound1File);
+//        }
+//        if ("none".equals(sound2File)) {
+//            
+//
+//        } else {
+//            System.out.println("Zone #" + zoneID + " loading audio file: " + sound2File);
+//            sound2 = minim.loadFile(sound2File);
+//        }
+        
+        if(new File(sound1File).exists()){
+        sound1 = minim.loadFile(sound1File);
+        System.out.println("Zone loaded sound file #1");
+        }
+        else{
+            System.out.println("Zone could not find file 1");
+        }
+        if(new File(sound2File).exists()){
+        sound2 = minim.loadFile(sound2File);
+        System.out.println("Zone loaded sound file #2");
+        }
+        else{
+            System.out.println("Zone could not find file 2");
+         
+        }
+    }
 
-  void setName(String n_) {
-    name=n_;
-  }
+    void setId(int id_) {
+        zoneID = id_;
+    }
 
-  void setInfo(String i_) {
-    info=i_;
-  }
+    int getId() {
+        return zoneID;
+    }
+    
+    //Sound Management
+    public boolean checkIfPlaying(int t_) {
+        if ((t_==0) && (sound1!=null)){
+            return sound1.isPlaying();
+        } else if ((t_ == 1) && (sound2!=null)) {
+            return sound2.isPlaying();
+        } else {
+            return false;
+        }
 
-  String getName() {
-    return name;
-  }
+    }
 
-  String getInfo() {
-    return info;
-  }
+    void playSound(int t_) {
+        if ((t_==0) && (sound1!=null)) {
+        sound1.play();
+        }
+        else if ((t_ == 1) && (sound2!=null)) {
+          sound2.play();
+        }
+    }
 
-  int getId() {
-    return zoneID;
-  }
-  int getLabel() {
-    return zoneLabel;
-  }
-  
+    void pauseSound(int t_) {
+          if ((t_==0) && (sound1!=null)) {
+        sound1.pause();
+        }
+        else if ((t_ == 1) && (sound2!=null)) {
+          sound2.pause();
+        }
+
+    }
+
+    void rewindSound(int t_) {
+          if (t_ == 0) {
+        sound1.rewind();
+        }
+        else if ((t_ == 1) && (sound2!=null)) {
+          sound2.rewind();
+        }
+
+    }
+
+
 }

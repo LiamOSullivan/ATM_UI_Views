@@ -27,15 +27,17 @@ public class MappletView extends PApplet implements ActionListener {
     Minim minim;
     ATMView parent;
     PImage mapImg = null;
+    
+    
     int w, h;
     PFont font;
-    MapSoundZone[] msz; //The zones in the map with associated sound files (e.g. recorded environmental sounds).
-    Zone [] zones; //Zones on map as segregated blobs extracted from the image.
+    SoundZone[] msz; //The zones in the map with associated sound files (e.g. recorded environmental sounds).
+    SegmentedZone [] zones; //Zones on map as segregated blobs extracted from the image.
     boolean isMapLoaded = false;
 
     ////Segmentation variables...
     ImageProcessor imgProcessor;
-    
+    int activeBlobIndex = -1, activeBlobLabel = -1;
     boolean showAllContours = false;
     int MIN_BLOB_SIZE = 20; //heuristic for ignoring small blobs
     int maxBlobSize, minBlobSize = MIN_BLOB_SIZE; //adjustable from settings GUI
@@ -104,12 +106,12 @@ public class MappletView extends PApplet implements ActionListener {
     }
 
     //Loads the array of zones with asscoiated sound files
-    public void setSoundZones(MapSoundZone[] m_) {
-        msz = m_;
+    public void setSoundZones(SoundZone[] sz_) {
+        msz = sz_;
     }
     //Loads the array of zones on map image. May have associated sound file or may not.
-    public void setZones(Zone[] z_){
-        zones=z_;
+    public void setSegmentedZones(SegmentedZone[] sz_){
+        zones=sz_;
     }
 
     /**
@@ -122,41 +124,7 @@ public class MappletView extends PApplet implements ActionListener {
                     msz[i].getZoneSize(), msz[i].getZoneSize());
         }
     }
-
-    private void playSound(int i_) {
-        //Check if a MapSoundZone is playing, pause, rewind and play new sound
-        int index = i_;
-        int playingID = -1;
-        boolean playing = false;
-        //find the index of sound currently playing
-        for (int i = 0; i < msz.length; i += 1) {
-            System.out.println("check if playing #" + i);
-            if (msz[i].checkIfPlaying()) {
-                System.out.println("sound playing is #" + i);
-                playingID = i;
-                playing = true;
-                break;
-            } else {
-                System.out.println("file # " + i + " isn't playing");
-            }
-        }
-        //if trying to play a different sound, pause the current playing sound
-        if (playing) {
-            if (index != playingID) {
-                System.out.println("Stopping sound: " + playingID);
-                msz[playingID].pauseSound();
-                msz[playingID].rewindSound();
-                System.out.println("And playing sound: " + index);
-                msz[index].playSound(); //play the new sound
-                msz[index].rewindSound();
-            }
-        } else {
-            System.out.println("SoundManager trying to play # " + index);
-            msz[index].playSound(); //play the sound
-            msz[index].rewindSound();
-        }
-
-    }
+   
 
     /*
      * mouse listeners and interaction handlers
@@ -176,25 +144,54 @@ public class MappletView extends PApplet implements ActionListener {
 
     }
 
-    void action(int n_, int x_, int y_) {
+   private void action(int n_, int x_, int y_) {
         int actionNo = n_;
         boolean keepChecking = true;
         //first check if over a sound zone
 
         for (int i = 0; i < msz.length; i += 1) {
             if (msz[i].checkIfOver(x_, y_)) {
-                println("Over soundZone #" + msz[i].getIndex());
-                playSound(i);
+                println("Over soundZone #" + msz[i].getId());
+                parent.controller.selectZone(msz, i, actionNo);
                 keepChecking = false;
                 break;
             }
         }
+        //TODO: stop sounds that are playing if map is clicked in space/ over building
         //if not over a sound zone, check if over a labelled building
         if (keepChecking) {
-            parent.findZone(x_, y_); //look for a building
-
+            findSegmentedZone(x_, y_, n_); //look for a building in view
         }
 
+    }
+    //Called if this has failed to find a SoundZone
+    private void findSegmentedZone(int x_, int y_, int act_) {
+        int xPos = x_;
+        int yPos = y_;
+        int actionNo = act_;
+        activeBlobIndex = imgProcessor.getBlobIndex(xPos, yPos);
+        //activeBlobLabel = bd.getLabel(mouseX, mouseY);
+        println("Inside blob #" + activeBlobIndex + " label : " + activeBlobLabel);
+        boolean keepChecking = true;
+        for (int i = 0; i < zones.length && keepChecking; i += 1) {
+            if (activeBlobIndex == -1) {
+                String nString = "There is no building here.";
+                String iString = "There is no information for this location.";
+                println(nString);
+                println(iString);
+                keepChecking = false;
+               
+            } else if (activeBlobIndex == zones[i].getLabel()) {
+                println("Building name: " + zones[i].getZoneName());
+                println("Building info: " + zones[i].getZoneInfo());
+                parent.controller.selectZone(zones, i, actionNo);                
+                keepChecking = false;
+            }
+        }
+        if (keepChecking) {
+            println("This is not a campus building");
+            
+        }
     }
 
 }
