@@ -7,7 +7,7 @@ package audioTactileMap;
 
 import processing.core.*;
 import ddf.minim.*;
-import java.awt.Color;
+import blobscanner.*; //Blobscanner library v. 0.1-a by Antonio Molinaro
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -24,24 +24,35 @@ import javax.imageio.ImageIO;
  */
 public class MappletView extends PApplet implements ActionListener {
 
+    Minim minim;
+    ATMView parent;
     PImage mapImg = null;
     int w, h;
     PFont font;
-    MapSoundZone[] msz;
+    MapSoundZone[] msz; //The zones in the map with associated sound files (e.g. recorded environmental sounds).
+    Zone [] zones; //Zones on map as segregated blobs extracted from the image.
     boolean isMapLoaded = false;
-    Minim minim;
 
-    MappletView() {
+    ////Segmentation variables...
+    ImageProcessor imgProcessor;
+    
+    boolean showAllContours = false;
+    int MIN_BLOB_SIZE = 20; //heuristic for ignoring small blobs
+    int maxBlobSize, minBlobSize = MIN_BLOB_SIZE; //adjustable from settings GUI
+    int segmentationStartTime; //Used to time blob detection and segmentation
 
+    MappletView(ATMView p_) {
+        parent = p_;
     }
 
     @Override
     public void setup() {
+        //System.out.println("Mapplet setup called");
         size(800, 600);
         font = createFont("CourierNewPSMT-48.vlw", 48);
         textFont(font, 24);
         fill(0);
-        
+
     }
 
     @Override
@@ -82,14 +93,23 @@ public class MappletView extends PApplet implements ActionListener {
     }
 
     public void setMapImage(String f_) {
-
         //System.out.println("Mapplet trying " + f_);
         mapImg = loadImage(f_);
-        size(mapImg.width, mapImg.height ); 
+        size(mapImg.width, mapImg.height);
     }
 
+    void processMapImage() {
+        imgProcessor = new ImageProcessor(this, mapImg);
+        imgProcessor.process();
+    }
+
+    //Loads the array of zones with asscoiated sound files
     public void setSoundZones(MapSoundZone[] m_) {
         msz = m_;
+    }
+    //Loads the array of zones on map image. May have associated sound file or may not.
+    public void setZones(Zone[] z_){
+        zones=z_;
     }
 
     /**
@@ -97,8 +117,9 @@ public class MappletView extends PApplet implements ActionListener {
      */
     private void drawSoundZones() {
         for (int i = 0; i < msz.length; i += 1) {
-            ellipse(msz[i].getZonePosition().x, msz[i].getZonePosition().y, 
-            msz[i].getZoneSize(), msz[i].getZoneSize());
+            fill(200, 0, 0, 150);
+            ellipse(msz[i].getZonePosition().x, msz[i].getZonePosition().y,
+                    msz[i].getZoneSize(), msz[i].getZoneSize());
         }
     }
 
@@ -138,16 +159,42 @@ public class MappletView extends PApplet implements ActionListener {
     }
 
     /*
-     * mouse listeners
+     * mouse listeners and interaction handlers
      */
     @Override
     public void mouseClicked() {
-        for (int i = 0; i < msz.length; i += 1) {
-            if (msz[i].checkIfOver(mouseX, mouseY)) {
-                println("Over soundZone #" + msz[i].getIndex());
-                playSound(i);
-            }
+        if (keyPressed && keyCode == SHIFT) {
+            println("MouseClicked Action 1");
+            action(1, mouseX, mouseY);
+        } else if (keyPressed && keyCode == CONTROL) {
+            println("MouseClicked Action 2");
+            action(2, mouseX, mouseY);
+        } else {
+            println("MouseClicked Action 0");
+            action(0, mouseX, mouseY);
         }
 
     }
+
+    void action(int n_, int x_, int y_) {
+        int actionNo = n_;
+        boolean keepChecking = true;
+        //first check if over a sound zone
+
+        for (int i = 0; i < msz.length; i += 1) {
+            if (msz[i].checkIfOver(x_, y_)) {
+                println("Over soundZone #" + msz[i].getIndex());
+                playSound(i);
+                keepChecking = false;
+                break;
+            }
+        }
+        //if not over a sound zone, check if over a labelled building
+        if (keepChecking) {
+            parent.findZone(x_, y_); //look for a building
+
+        }
+
+    }
+
 }

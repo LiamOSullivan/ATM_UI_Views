@@ -108,7 +108,7 @@ public class ATMModel extends PApplet {
                 ipElement = settingsElement[0].getChildren("oscaddress");
                 localIPString = ipElement[0].getString("ip");
                 println("Local IP address is " + localIPString);
-            //TODO: get IP address of network adapter, not from xml
+                //TODO: get IP address of network adapter, not from xml
                 //get path data
 
                 pathElement = settingsElement[0].getChildren("path");
@@ -171,14 +171,15 @@ public class ATMModel extends PApplet {
                     if (!f.equals("null")) {
                         System.out.println("This zone has an associated audio file: " + f);
                         //Zone(int i_, int l_, String n_, String info_, String audiofile)
-                    zones[i] = new Zone(i, label, name, info, f);
+                        zones[i] = new Zone(i, label, name, info, f);
                     } else {
                         System.out.println("This zone has no associated audio file");
+
+                        //TODO: Instantiate when no audio file alternative (subsequent use of TTS)
                         //Zone(int i_, int l_, String n_, String info_)
-                    zones[i] = new Zone(i, label, name, info);
+                        zones[i] = new Zone(i, label, name, info);
                     }
                     System.out.println("***");
-                    
 
                 }
             }
@@ -211,4 +212,10 @@ public class ATMModel extends PApplet {
     public MapSoundZone[] getSoundZones() {
         return soundZones;
     }
+
+      public Zone[] getZones() {
+
+        return zones;
+    }
+
 }

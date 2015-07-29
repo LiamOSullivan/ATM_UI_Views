@@ -12,6 +12,7 @@ import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import processing.core.*;
 import javax.swing.JTextArea;
+import static processing.core.PApplet.println;
 
 /**
  *
@@ -22,26 +23,59 @@ public class ATMView extends javax.swing.JFrame {
 
     ATMController controller;
     MappletView mapplet;
-    
+    int activeBlobIndex = -1, activeBlobLabel = -1;
 
     /**
      * Creates new form ATMFrame
      */
     public ATMView() {
-        
+
         initComponents(); //menus etc.
-        mapplet = new MappletView(); //PApplet to embed in JPanel of ATMView
+        mapplet = new MappletView(this); //PApplet to embed in JPanel of ATMView
         mapplet.init();
         jPanel1.add(mapplet);
 
     }
+
     //called by ATMController after it has loaded an ATMModel
-    public void updateMap(){
+    public void updateMap() {
         mapplet.setMapImage(controller.getImagePath());
         mapplet.setSoundZones(controller.getSoundZones());
         mapplet.setMapLoaded(true);
-        
-    
+        mapplet.processMapImage();
+        mapplet.setZones(controller.getZones());
+
+    }
+
+    protected void findZone(int x_, int y_) {
+        int xPos = x_;
+        int yPos = y_;
+        activeBlobIndex = mapplet.imgProcessor.getBlobIndex(xPos, yPos);
+//activeBlobLabel = bd.getLabel(mouseX, mouseY);
+        println("Inside blob #" + activeBlobIndex + " label : " + activeBlobLabel);
+        boolean keepChecking = true;
+        boolean noBuilding = true;
+        for (int i = 0; i < mapplet.zones.length && keepChecking; i += 1) {
+            if (activeBlobIndex == -1) {
+                String nString = "There is no building here.";
+                String iString = "There is no information for this location.";
+                println(nString);
+                println(iString);
+                keepChecking = false;
+                noBuilding = true;
+            } else if (activeBlobIndex == mapplet.zones[i].getLabel()) {
+                println("Building name: " + mapplet.zones[i].getName());
+                println("Building info: " + mapplet.zones[i].getInfo());
+                
+
+                noBuilding = false;
+                keepChecking = false;
+            }
+        }
+        if (keepChecking) {
+            println("This is not a campus building");
+            noBuilding = true;
+        }
     }
 
     public void registerListener(ATMController c_) {
@@ -278,7 +312,7 @@ public class ATMView extends javax.swing.JFrame {
             controller.loadFile(file);
             //sending the selectedFile to loadBgImage() in the PApplet
             //mapplet.loadMapImage(fc.getSelectedFile());           
-            
+
         } else {
             System.out.println("Open command cancelled by user.");
         }
