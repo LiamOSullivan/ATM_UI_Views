@@ -104,6 +104,13 @@ public class ATMController extends PApplet {
                 mszPlay.playSound(soundType); //play the new sound
                 mszPlay.rewindSound(soundType);
             }
+            else{
+            //if selecting an already playing sound or if clicking in space, stop currently playing sound    
+                System.out.println("Stopping sound: " + playingID);
+                mszStop = msz[playingID];
+                mszStop.pauseSound(soundType);
+                mszStop.rewindSound(soundType);
+            }
         } else {
             //if nothihng is playing, just play the selected sound
             System.out.println("SoundManager trying to play # " + index);
