@@ -5,8 +5,16 @@
 package audioTactileMap;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.io.IOException;
+import java.io.BufferedWriter;
+import java.nio.file.StandardCopyOption;
+import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import processing.core.*;
 import processing.data.XML;
 //TODO: only import what's needed from Processing
@@ -18,7 +26,9 @@ import processing.data.XML;
 public class ATMModel extends PApplet {
 
     File file;
-    String filePath = "null", fileDir = "null";
+    String openFilePath = "null", openFileDir = "null";
+    //TODO: remove hard-coded default path
+    String defaultXMLPath = "C:\\Users\\Administrator\\Documents\\My ATM Files\\default\\default.xml";
     String[] tags = {"soundzones", "soundzone", "mapImage", "settings", "oscaddress"}; //list all tags to be parse from XML here
     //XML Elements to parse from file
     //TODO: remove need to hold these in memory and only store parsed data
@@ -47,8 +57,10 @@ public class ATMModel extends PApplet {
     String spokenSoundDir = "null"; //path to audio files
     String selfSoundDir = "null";
     String imageDir = "null";
+    
+    boolean isModelLoaded = false;
 
-    ImageProcessor imgProcessor; //class to process and segment the map image
+    //ImageProcessor imgProcessor; //class to process and segment the map image
 
 //  SoundZone [] soundZones, impulseSoundZones; 
 //  SoundManager envSoundManager, impulseSoundManager; //Stores audio files of different types
@@ -93,10 +105,15 @@ public class ATMModel extends PApplet {
 
     void loadFile(File f_) {
         file = f_;
-        filePath = file.getAbsolutePath();
-        fileDir = filePath.substring(0, filePath.lastIndexOf(File.separator));
-        System.out.println("Model is opening file: " + filePath);
-        xml = loadXML(filePath);
+        openFilePath = file.getAbsolutePath();
+        openFileDir = openFilePath.substring(0, openFilePath.lastIndexOf(File.separator));
+        System.out.println("Model is opening file: " + openFilePath);
+        parseXMLFile(openFilePath);
+    }
+
+    void parseXMLFile(String f_) {
+        String filepath_ = f_;
+        xml = loadXML(filepath_);
         //parse map data...
         //used specifc tags in code, could generalise but would need to create recursive/ multilevel
         //accesss to elements and create named arrays/ hashmaps
@@ -130,7 +147,7 @@ public class ATMModel extends PApplet {
             if (imageElement.length > 0) {
                 imageFileName = imageElement[0].getString("filename");
                 System.out.println("Image file from xml: " + imageFileName);
-                imageFilePath = fileDir + imageDir + imageFileName;
+                imageFilePath = openFileDir + imageDir + imageFileName;
             }
 
             //get soundZones data and instantiate SoundZone objects in array
@@ -148,8 +165,8 @@ public class ATMModel extends PApplet {
                     int yPos = soundZoneElement[i].getInt("yPos");
                     String f = soundZoneElement[i].getString("file");
                     System.out.println("\t pos: " + xPos + ", " + yPos + "\t uses file '" + f + "' ");
-                    String envSP = "" + fileDir + envSoundDir + f;
-                    String selfSP = "" + fileDir + selfSoundDir + f;
+                    String envSP = "" + openFileDir + envSoundDir + f;
+                    String selfSP = "" + openFileDir + selfSoundDir + f;
                     System.out.println("Full path: " + envSP);
                     soundZones[i] = new SoundZone(this, i, new PVector(xPos, yPos), size, envSP, selfSP);
 
@@ -177,7 +194,7 @@ public class ATMModel extends PApplet {
                         //Zone(int i_, int l_, String n_, String info_)
                         zones[i] = new SegmentedZone(this, i, label, name, info);
                     } else {
-                        String zoneSP = "" + fileDir + spokenSoundDir + f;
+                        String zoneSP = "" + openFileDir + spokenSoundDir + f;
                         System.out.println("This zone has an associated audio file: " + zoneSP);
                         //Zone(int i_, int l_, String n_, String info_, String audiofile)
                         zones[i] = new SegmentedZone(this, i, label, name, info, zoneSP);
@@ -189,9 +206,81 @@ public class ATMModel extends PApplet {
         }
     }
 
-    void saveFile(File f_) {
-    System.out.println("Saving file to Model" );
+    void saveFile(File f_) throws IOException {
+        System.out.println("Saving file to Model");
+        file = f_;
+        String saveFilePath = file.getAbsolutePath();
+        String saveFileDir = saveFilePath.substring(0, saveFilePath.lastIndexOf(File.separator));
+        System.out.println("Model is saving file: " + saveFilePath);
+        BufferedWriter output = null;
+        if (!file.isDirectory()) {
+            boolean success = file.mkdirs();
+            if (success) {
+                System.out.println("Created path: " + saveFilePath);
+                //create sub-directories
+                new File(saveFilePath + "//sounds//").mkdirs();
+                new File(saveFilePath + "//images//").mkdirs();
+                new File(saveFilePath + "//sounds//environment").mkdirs();
+                new File(saveFilePath + "//sounds//self-produced").mkdirs();
+                new File(saveFilePath + "//sounds//spoken").mkdirs();
+                
+                //if a map hasn't been opened already, use the default resources
+                if(!isModelLoaded){
+                    loadFile(new File(defaultXMLPath));                   
+                }
+                copyAsset(imageFilePath, saveFilePath + "//images//" + imageFileName);
+                
+//                String newFilePath = saveFilePath + "//" + file.getName();
+//                System.out.println("Creating file: " + newFilePath);
+//                writeXMLFile(newFilePath);
+//                try {
+//                    //output = new BufferedWriter(
+//                     //       new FileWriter(saveFilePath + "//" + file.getName() + ".xml"));
+//                    writeXMLFile(output);
+//                    System.out.println("Created file: " + saveFilePath + "//" + file.getName() + ".txt");
+//                } catch (IOException e) {
+//                    System.out.println("Error creating file: ");
+//                    e.printStackTrace();
+//                } finally {
+//                    if (output != null) {
+//                        System.out.println("Closing file ");
+//                        output.close();
+//                    }
+//                }
 
+            } else {
+                System.out.println("Could not create path: " + file.getPath());
+            }
+        } else {
+            System.out.println("Path exists: " + file.getPath());
+        }
+
+    }
+
+    void writeXMLFile(String npf_) {
+        String newFileP = npf_;
+        //BufferedWriter out=o_;
+        if (defaultXMLPath != null) {
+            XML newXML = loadXML(defaultXMLPath);
+            if (newXML != null) {
+                println("Writing xml file");
+                saveXML(newXML, newFileP);
+            }
+        }
+    }
+
+    void copyAsset(String s_, String d_) {
+        System.out.print("Copy from " + s_);
+        System.out.println(" to " + d_);
+        File src = new File(s_);
+        File target = new File(d_);
+        Path srcP = src.toPath();
+        Path targetP = src.toPath();
+        try {
+            Files.copy(src.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ex) {
+            Logger.getLogger(ATMModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     String getImageFilePath() {

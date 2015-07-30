@@ -14,25 +14,24 @@ import javax.swing.JFileChooser;
 /**
  *
  * @author Liam O'Sullivan
- *                                                                 
+ *
  */
 public class ATMView extends javax.swing.JFrame {
 
     ATMController controller;
     MappletView mapplet;
-    
 
     /**
      * Creates new form ATMFrame
      */
     public ATMView() {
         //ensure menus appear above heavyweight element (e.g. Mapplet in Panel)
-        JPopupMenu.setDefaultLightWeightPopupEnabled(false); 
-        
+        JPopupMenu.setDefaultLightWeightPopupEnabled(false);
+
         initComponents(); //menus etc.
         mapplet = new MappletView(this); //PApplet to embed in JPanel of ATMView
         mapplet.init();
-        jPanel1.add(mapplet);       
+        jPanel1.add(mapplet);
     }
 
     //called by ATMController after it has loaded an ATMModel
@@ -42,8 +41,8 @@ public class ATMView extends javax.swing.JFrame {
         mapplet.setSegmentedZones(controller.getSegmentedZones());
         mapplet.setMapLoaded(true);
         mapplet.processMapImage();
-        
-    }   
+
+    }
 
     public void registerListener(ATMController c_) {
         controller = c_;
@@ -256,10 +255,10 @@ public class ATMView extends javax.swing.JFrame {
         System.out.println("Save File Selected");
         int returnVal = fc.showSaveDialog(null);
         System.out.println("val = " + returnVal);
-
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();
-            System.out.println("Saving: " + file.getName() + "." + newline);
+            System.out.println("View: Save: " + file.getName() + "." + newline);
+            controller.saveFile(file);
         } else {
             System.out.println("Save command cancelled by user." + newline);
         }
@@ -318,16 +317,16 @@ public class ATMView extends javax.swing.JFrame {
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();
-            //This is where a real application would open the file.
-            System.out.println("Saving As: " + file.getName() + "." + newline);
+            System.out.println("View: Saving As: " + file.getName() + "." + newline);
+            controller.saveFile(file);
         } else {
-            System.out.println("Save As command cancelled by user." + newline);
+            System.out.println("View: Save As command cancelled by user." + newline);
         }
     }//GEN-LAST:event_saveMapAsMenuItemActionPerformed
 
     private void EditMenuCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditMenuCheckboxActionPerformed
         // TODO add your handling code here:
-       
+
     }//GEN-LAST:event_EditMenuCheckboxActionPerformed
 
     private void audioSettingsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_audioSettingsMenuItemActionPerformed
@@ -365,8 +364,8 @@ public class ATMView extends javax.swing.JFrame {
 
     private void EditMenuCheckboxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_EditMenuCheckboxItemStateChanged
         // TODO add your handling code here:
-         System.out.println("EditMenuCheckboxActionPerformed: "
-                + "Value is "+EditMenuCheckbox.getState());
+        System.out.println("EditMenuCheckboxActionPerformed: "
+                + "Value is " + EditMenuCheckbox.getState());
     }//GEN-LAST:event_EditMenuCheckboxItemStateChanged
 
     static private final String newline = "\n";

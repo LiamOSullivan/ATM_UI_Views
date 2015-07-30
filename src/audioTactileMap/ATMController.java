@@ -6,6 +6,9 @@
 package audioTactileMap;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import processing.core.*;
 
 /**
@@ -49,7 +52,11 @@ public class ATMController extends PApplet {
     void saveFile(File f_){
         File file = f_;
         System.out.println("Controller Saving: " + file.getName());
-        model.saveFile(file);
+        try {
+            model.saveFile(file);
+        } catch (IOException ex) {
+            Logger.getLogger(ATMController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
 
