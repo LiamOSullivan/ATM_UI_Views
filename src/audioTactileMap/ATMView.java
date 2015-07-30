@@ -8,12 +8,13 @@ package audioTactileMap;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import javax.swing.JButton;
+import javax.swing.JPopupMenu;
 import javax.swing.JFileChooser;
 
 /**
  *
  * @author Liam O'Sullivan
- *
+ *                                                                 
  */
 public class ATMView extends javax.swing.JFrame {
 
@@ -25,12 +26,13 @@ public class ATMView extends javax.swing.JFrame {
      * Creates new form ATMFrame
      */
     public ATMView() {
-
+        //ensure menus appear above heavyweight element (e.g. Mapplet in Panel)
+        JPopupMenu.setDefaultLightWeightPopupEnabled(false); 
+        
         initComponents(); //menus etc.
         mapplet = new MappletView(this); //PApplet to embed in JPanel of ATMView
         mapplet.init();
-        jPanel1.add(mapplet);
-
+        jPanel1.add(mapplet);       
     }
 
     //called by ATMController after it has loaded an ATMModel
@@ -72,7 +74,7 @@ public class ATMView extends javax.swing.JFrame {
         jSeparator5 = new javax.swing.JPopupMenu.Separator();
         exitMenu = new javax.swing.JMenuItem();
         editMapMenuItem = new javax.swing.JMenu();
-        jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
+        EditMenuCheckbox = new javax.swing.JCheckBoxMenuItem();
         viewMenu = new javax.swing.JMenu();
         SettingsMenu = new javax.swing.JMenu();
         audioSettingsMenuItem = new javax.swing.JMenuItem();
@@ -160,14 +162,19 @@ public class ATMView extends javax.swing.JFrame {
             }
         });
 
-        jCheckBoxMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
-        jCheckBoxMenuItem1.setText("Edit Map");
-        jCheckBoxMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBoxMenuItem1ActionPerformed(evt);
+        EditMenuCheckbox.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
+        EditMenuCheckbox.setText("Edit Map");
+        EditMenuCheckbox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                EditMenuCheckboxItemStateChanged(evt);
             }
         });
-        editMapMenuItem.add(jCheckBoxMenuItem1);
+        EditMenuCheckbox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EditMenuCheckboxActionPerformed(evt);
+            }
+        });
+        editMapMenuItem.add(EditMenuCheckbox);
 
         jMenuBar1.add(editMapMenuItem);
 
@@ -252,7 +259,6 @@ public class ATMView extends javax.swing.JFrame {
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();
-            //This is where a real application would open the file.
             System.out.println("Saving: " + file.getName() + "." + newline);
         } else {
             System.out.println("Save command cancelled by user." + newline);
@@ -300,6 +306,7 @@ public class ATMView extends javax.swing.JFrame {
 
     private void editMapMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editMapMenuItemActionPerformed
         // TODO add your handling code here:
+        System.out.println("***Edit Map Menu***");
     }//GEN-LAST:event_editMapMenuItemActionPerformed
 
     private void saveMapAsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMapAsMenuItemActionPerformed
@@ -318,13 +325,14 @@ public class ATMView extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_saveMapAsMenuItemActionPerformed
 
-    private void jCheckBoxMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem1ActionPerformed
+    private void EditMenuCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditMenuCheckboxActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBoxMenuItem1ActionPerformed
+       
+    }//GEN-LAST:event_EditMenuCheckboxActionPerformed
 
     private void audioSettingsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_audioSettingsMenuItemActionPerformed
         //instantiates audio settings menu
-        System.out.println("audioSettings action performed: ");
+        System.out.println("Audio Settings action performed: ");
         AudioSettings as = new AudioSettings();
         as.setVisible(true);
 
@@ -332,7 +340,7 @@ public class ATMView extends javax.swing.JFrame {
 
     private void inputSettingsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputSettingsMenuItemActionPerformed
         // TODO add your handling code here:
-        System.out.println("audioSettings action performed: ");
+        System.out.println("Input Settings action performed: ");
         InputSettings is = new InputSettings();
         is.setVisible(true);
 
@@ -340,6 +348,7 @@ public class ATMView extends javax.swing.JFrame {
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
+        System.out.println("jMenuItem1ActionPerformed");
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void audioSettingsMenuItemStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_audioSettingsMenuItemStateChanged
@@ -354,12 +363,19 @@ public class ATMView extends javax.swing.JFrame {
 //        
     }//GEN-LAST:event_audioSettingsMenuItemStateChanged
 
+    private void EditMenuCheckboxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_EditMenuCheckboxItemStateChanged
+        // TODO add your handling code here:
+         System.out.println("EditMenuCheckboxActionPerformed: "
+                + "Value is "+EditMenuCheckbox.getState());
+    }//GEN-LAST:event_EditMenuCheckboxItemStateChanged
+
     static private final String newline = "\n";
     JButton openButton, saveButton;
     JFileChooser fc;
     //JComponent scrollP = new ScrollPanel();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBoxMenuItem EditMenuCheckbox;
     private javax.swing.JMenu FileMenu;
     private javax.swing.JMenu SettingsMenu;
     private javax.swing.JMenu aboutMenu;
@@ -369,7 +385,6 @@ public class ATMView extends javax.swing.JFrame {
     private javax.swing.JMenuItem exitMenu;
     private javax.swing.JMenuItem findZonesMenuItem;
     private javax.swing.JMenuItem inputSettingsMenuItem;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;

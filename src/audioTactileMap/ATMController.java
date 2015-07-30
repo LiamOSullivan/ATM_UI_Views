@@ -16,6 +16,7 @@ public class ATMController extends PApplet {
 
     ATMView view;
     ATMModel model;
+    boolean MapEditMode = false;
     
 
     ATMController(ATMModel m_, ATMView v_) {
@@ -39,9 +40,17 @@ public class ATMController extends PApplet {
         System.out.println("Controller Opening: " + file.getName());
         model.loadFile(file);
         view.updateMap(); //tells the view to update the ATM based on data in model
+        //view.setVisible(true);
 
         //model.set(da.getModel()); //get the data loaded by the DAC and put in model       
         //TODO: use a listener to update model AFTER the data has been loaded from XML file.
+    }
+    
+    void saveFile(File f_){
+        File file = f_;
+        System.out.println("Controller Saving: " + file.getName());
+        model.saveFile(file);
+        
     }
 
     public String getImagePath() {

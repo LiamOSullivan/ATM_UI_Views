@@ -189,22 +189,8 @@ public class ATMModel extends PApplet {
         }
     }
 
-    //    public void getImageFile(){
-//            try{
-//            bi = ImageIO.read(new File("C:\\OneDrive\\Projects\\Leicester\\Phase_2\\Code\\NetbeansGUI\\ATMDisplayGUI\\ATM_UI_Views\\src\\resources\\CampusMap_A4_Print.png"));
-//            System.out.println("Image loaded: "+"CampusMap_A4_Print.png");
-//            }
-//            catch(IOException e){
-//            System.out.println("Image file not found");
-//            }
-//    }
-//TODO: accessor methods as required
-    boolean hasImage() {
-        if (bg != null) {
-            return true;
-        } else {
-            return false;
-        }
+    void saveFile(File f_) {
+    System.out.println("Saving file to Model" );
 
     }
 

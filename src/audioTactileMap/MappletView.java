@@ -54,6 +54,7 @@ public class MappletView extends PApplet implements ActionListener {
         font = createFont("CourierNewPSMT-48.vlw", 48);
         textFont(font, 24);
         fill(0);
+        //parent.setJMenuBar(parent.jMenuBar1);
 
     }
 
@@ -97,6 +98,7 @@ public class MappletView extends PApplet implements ActionListener {
     public void setMapImage(String f_) {
         //System.out.println("Mapplet trying " + f_);
         mapImg = loadImage(f_);
+        //TODO: scale images which are too big
         size(mapImg.width, mapImg.height);
     }
 

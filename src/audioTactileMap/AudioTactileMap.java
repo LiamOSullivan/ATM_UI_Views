@@ -47,17 +47,13 @@ public class AudioTactileMap {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 
-                ATMModel atmModel = new ATMModel();
                 ATMView atmView = new ATMView();
-                //SettingsView
+                ATMModel atmModel = new ATMModel();
                 
                 ATMController atmController = new ATMController(atmModel, atmView);
-                
-                //SettingsController settingsC = new SettingsController();
-                
                 atmController.init();
-                //settingsC.init();
-                
+                //MappletView mapplet = new MappletView(atmView);
+                //mapplet.init();
                 atmView.registerListener(atmController);
                 atmView.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 atmView.setTitle(new String ("Audio Tactile Map"));
