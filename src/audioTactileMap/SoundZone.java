@@ -21,7 +21,7 @@ class SoundZone extends Zone {
     float size;
 
     SoundZone(PApplet p_, int i_, PVector pv_) {
-        this(p_, i_, pv_, 20.0F, "none", "none"); //supply default size and placeholder String for sound1File
+        this(p_, i_, pv_, 20.0F, "none", "none"); //supply default size and placeholder String for soundFiles
 
     }
 
@@ -42,12 +42,6 @@ class SoundZone extends Zone {
 
     void setZoneSize(float size_) {
         size = size_;
-    }
-
-    void setSoundFile(String f_) {
-        sound1File = f_;
-        //ap = minim.loadFile(sound1File);
-
     }
 
     public PVector getZonePosition() {

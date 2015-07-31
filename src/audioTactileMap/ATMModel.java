@@ -109,6 +109,7 @@ public class ATMModel extends PApplet {
         openFileDir = openFilePath.substring(0, openFilePath.lastIndexOf(File.separator));
         System.out.println("Model is opening file: " + openFilePath);
         parseXMLFile(openFilePath);
+        isModelLoaded=true;
     }
 
     void parseXMLFile(String f_) {
@@ -229,7 +230,13 @@ public class ATMModel extends PApplet {
                     loadFile(new File(defaultXMLPath));                   
                 }
                 copyAsset(imageFilePath, saveFilePath + "//images//" + imageFileName);
-                
+                //copy all assets associated with SoundZones
+                for(int i=0;i<soundZones.length;i+=1){
+                ArrayList<String> s = soundZones[i].getSoundFilePaths();
+                copyAsset(s.get(0), saveFilePath + "//sounds//environment//" + s.get(0).getName());
+                copyAsset(s.get(1), saveFilePath + "//sounds//self-produced//" + s.get(0).getName());
+                }
+                //copyAsset(imageFilePath, saveFilePath + "//sounds//spoken//" + imageFileName);
 //                String newFilePath = saveFilePath + "//" + file.getName();
 //                System.out.println("Creating file: " + newFilePath);
 //                writeXMLFile(newFilePath);
@@ -270,7 +277,7 @@ public class ATMModel extends PApplet {
     }
 
     void copyAsset(String s_, String d_) {
-        System.out.print("Copy from " + s_);
+        System.out.println("Copy from " + s_);
         System.out.println(" to " + d_);
         File src = new File(s_);
         File target = new File(d_);
