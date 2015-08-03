@@ -31,8 +31,8 @@ public class MappletView extends PApplet implements ActionListener {
     
     int w, h;
     PFont font;
-    SoundZone[] msz; //The zones in the map with associated sound files (e.g. recorded environmental sounds).
-    SegmentedZone [] zones; //Zones on map as segregated blobs extracted from the image.
+    ArrayList <SoundZone> msz; //The zones in the map with associated sound files (e.g. recorded environmental sounds).
+    ArrayList <SegmentedZone> zones; //Zones on map as segregated blobs extracted from the image.
     boolean isMapLoaded = false;
 
     ////Segmentation variables...
@@ -108,11 +108,11 @@ public class MappletView extends PApplet implements ActionListener {
     }
 
     //Loads the array of zones with asscoiated sound files
-    public void setSoundZones(SoundZone[] sz_) {
+    public void setSoundZones(ArrayList<SoundZone> sz_) {
         msz = sz_;
     }
     //Loads the array of zones on map image. May have associated sound file or may not.
-    public void setSegmentedZones(SegmentedZone[] sz_){
+    public void setSegmentedZones(ArrayList<SegmentedZone>sz_){
         zones=sz_;
     }
 
@@ -120,10 +120,10 @@ public class MappletView extends PApplet implements ActionListener {
      * real-time drawing methods
      */
     private void drawSoundZones() {
-        for (int i = 0; i < msz.length; i += 1) {
+        for (int i = 0; i < msz.size(); i += 1) {
             fill(200, 0, 0, 150);
-            ellipse(msz[i].getZonePosition().x, msz[i].getZonePosition().y,
-                    msz[i].getZoneSize(), msz[i].getZoneSize());
+            ellipse(msz.get(i).getZonePosition().x, msz.get(i).getZonePosition().y,
+                    msz.get(i).getZoneSize(), msz.get(i).getZoneSize());
         }
     }
    
@@ -151,9 +151,9 @@ public class MappletView extends PApplet implements ActionListener {
         boolean keepChecking = true;
         //first check if over a sound zone
 
-        for (int i = 0; i < msz.length; i += 1) {
-            if (msz[i].checkIfOver(x_, y_)) {
-                println("Over soundZone #" + msz[i].getId());
+        for (int i = 0; i < msz.size(); i += 1) {
+            if (msz.get(i).checkIfOver(x_, y_)) {
+                println("Over soundZone #" + msz.get(i).getId());
                 parent.controller.selectZone(msz, i, actionNo);
                 keepChecking = false;
                 break;
@@ -175,7 +175,7 @@ public class MappletView extends PApplet implements ActionListener {
         //activeBlobLabel = bd.getLabel(mouseX, mouseY);
         println("Inside blob #" + activeBlobIndex + " label : " + activeBlobLabel);
         boolean keepChecking = true;
-        for (int i = 0; i < zones.length && keepChecking; i += 1) {
+        for (int i = 0; i < zones.size() && keepChecking; i += 1) {
             if (activeBlobIndex == -1) {
                 String nString = "There is no building here.";
                 String iString = "There is no information for this location.";
@@ -183,9 +183,9 @@ public class MappletView extends PApplet implements ActionListener {
                 println(iString);
                 keepChecking = false;
                
-            } else if (activeBlobIndex == zones[i].getLabel()) {
-                println("Building name: " + zones[i].getZoneName());
-                println("Building info: " + zones[i].getZoneInfo());
+            } else if (activeBlobIndex == zones.get(i).getLabel()) {
+                println("Building name: " + zones.get(i).getZoneName());
+                println("Building info: " + zones.get(i).getZoneInfo());
                 parent.controller.selectZone(zones, i, actionNo);                
                 keepChecking = false;
             }

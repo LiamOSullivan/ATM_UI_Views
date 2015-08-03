@@ -47,12 +47,12 @@ class SegmentedZone extends Zone {
     }
 
     public boolean hasNameAudioFile() {
-        return (sound1 != null);
+        return (sounds.get(0) != null);
 
     }
     
     public boolean hasInfoAudioFile() {
-        return (sound2 != null);
+        return (sounds.get(1) != null);
 
     }
 

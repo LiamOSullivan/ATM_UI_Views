@@ -19,7 +19,7 @@ class SoundZone extends Zone {
 
     PVector loc;
     float size;
-
+    
     SoundZone(PApplet p_, int i_, PVector pv_) {
         this(p_, i_, pv_, 20.0F, "none", "none"); //supply default size and placeholder String for soundFiles
 
@@ -50,6 +50,16 @@ class SoundZone extends Zone {
 
     public float getZoneSize() {
         return size;
+    }
+    
+    public boolean hasEnvAudioFile() {
+        return (sounds.get(0) != null);
+
+    }
+    
+    public boolean hasSelfAudioFile() {
+        return (sounds.get(1) != null);
+
     }
 
     boolean checkIfOver(int xIn_, int yIn_) {

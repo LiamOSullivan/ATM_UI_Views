@@ -7,6 +7,7 @@ package audioTactileMap;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import processing.core.*;
@@ -64,42 +65,45 @@ public class ATMController extends PApplet {
         return model.getImageFilePath();
     }
 
-    public SoundZone[] getSoundZones() {
+    public ArrayList <SoundZone> getSoundZones() {
         return model.getSoundZones();
             }
 
-    public SegmentedZone[] getSegmentedZones() {
+    public ArrayList <SegmentedZone> getSegmentedZones() {
         return model.getSegmentedZones();
     }
     
-    public void selectZone(SoundZone [] z_, int zi_, int act_){
-       playSoundZone(0, zi_, act_);
+    public void selectZone(ArrayList z_, int zi_, int act_){
+       playZoneSound(z_, zi_, act_);
+       
    }
     
-    public void selectZone(SegmentedZone [] z_, int zi_, int act_){
-        playSoundZone(1, zi_, act_);        
-    }
-
-    public void playSoundZone(int zt_, int i_, int st_) {
+    public void playZoneSound(ArrayList z_, int i_, int st_) {
         //Check if a SoundZone is playing, pause, rewind and play new sound
-        int zoneType = zt_;
-        Zone [] msz;
-        if(zoneType == 0){
-        msz = model.getSoundZones();
-        }
-        else {
-        msz = model.getSegmentedZones();
-        }
+        ArrayList<Zone> z =z_;
+//        ArrayList <SoundZone> soundZ;
+//        ArrayList <SegmentedZone> segZ;
         int index = i_;
         int soundType = st_;
-        
         int playingID = -1;
         boolean playing = false;
         Zone mszStop, mszPlay;
+//        if(z.get(0) instanceof SoundZone){
+//            for(int i=0; i<z.size();i+=1){
+//            soundZ.add((SoundZone) z.get(i));
+//            }
+//        
+//        }
+//        else{
+//            for(int i=0; i<z.size();i+=1){
+//            segZ.add((SegmentedZone) z.get(i));
+//            }
+//        }
+        
         //find the index of sound currently playing
-        for (int i = 0; i < model.getSoundZones().length; i += 1) {
+        for (int i = 0; i < model.getSoundZones().size(); i += 1) {
             System.out.println("check if playing #" + i);
-            if (msz[i].checkIfPlaying(soundType)) {
+            if (z.get(i).checkIfPlaying(soundType)) {
                 System.out.println("sound playing is #" + i);
                 playingID = i;
                 playing = true;
@@ -112,26 +116,26 @@ public class ATMController extends PApplet {
         if (playing) {
             if (index != playingID) {
                 System.out.println("Stopping sound: " + playingID);
-                mszStop = msz[playingID];
+                mszStop = z.get(playingID);
                 mszStop.pauseSound(soundType);
                 mszStop.rewindSound(soundType);
                 System.out.println("And playing sound: " + index);
-                mszPlay = msz[index];
+                mszPlay = z.get(index);
                 mszPlay.playSound(soundType); //play the new sound
                 mszPlay.rewindSound(soundType);
             }
             else{
             //if selecting an already playing sound or if clicking in space, stop currently playing sound    
                 System.out.println("Stopping sound: " + playingID);
-                mszStop = msz[playingID];
+                mszStop = z.get(playingID);
                 mszStop.pauseSound(soundType);
                 mszStop.rewindSound(soundType);
             }
         } else {
             //if nothihng is playing, just play the selected sound
             System.out.println("SoundManager trying to play # " + index);
-            msz[index].playSound(soundType); //play the sound
-            msz[index].rewindSound(soundType);
+            z.get(index).playSound(soundType); //play the sound
+            z.get(index).rewindSound(soundType);
         }
 
     }

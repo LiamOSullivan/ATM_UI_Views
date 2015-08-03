@@ -18,8 +18,9 @@ class Zone {
 
     PApplet parent; //parent class is model and extends PApplet
     ArrayList<String> soundFilePaths = new ArrayList();
+    ArrayList<File> soundFiles = new ArrayList();
+    ArrayList<AudioPlayer> sounds = new ArrayList();
     Minim minim;
-    AudioPlayer[] sounds;
 
     int zoneID;
 
@@ -50,7 +51,8 @@ class Zone {
 
         for (int i = 0; i < soundFilePaths.size(); i += 1) {
             if (new File(soundFilePaths.get(i)).exists()) {
-                sounds[i] = minim.loadFile(soundFilePaths.get(i));
+                soundFiles.add(new File(soundFilePaths.get(i)));
+                sounds.add(minim.loadFile(soundFilePaths.get(i)));
                 System.out.println("Zone loaded sound file #" + i);
             } else {
                 System.out.println("Zone could not find file #" + i);
@@ -70,7 +72,12 @@ class Zone {
         return soundFilePaths;
 
     }
-    
+
+    ArrayList<File> getSoundFiles() {
+        return soundFiles;
+
+    }
+
     void setSoundFilePaths() {
         //TODO if accessor needed
 
@@ -78,9 +85,9 @@ class Zone {
 
     //Sound Management
     public boolean checkIfPlaying(int t_) {
-
-        if (sounds[t_] != null) {
-            return sounds[t_].isPlaying();
+        System.out.println("checking for element #" + t_ + " in arraylist of size " + sounds.size());
+        if ((t_) < sounds.size()) {
+            return sounds.get(t_).isPlaying();
 
         } else {
             return false;
@@ -89,21 +96,22 @@ class Zone {
     }
 
     void playSound(int t_) {
-        if (sounds[t_] != null) {
-            sounds[t_].play();
+
+        if ((t_) < sounds.size()) {
+            sounds.get(t_).play();
         }
     }
 
     void pauseSound(int t_) {
-        if (sounds[t_] != null) {
-            sounds[t_].pause();
+        if ((t_) < sounds.size()) {
+            sounds.get(t_).pause();
         }
 
     }
 
     void rewindSound(int t_) {
-        if (sounds[t_] != null) {
-            sounds[t_].rewind();
+        if ((t_) < sounds.size()) {
+            sounds.get(t_).rewind();
         }
 
     }
