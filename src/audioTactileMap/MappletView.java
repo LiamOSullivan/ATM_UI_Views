@@ -27,13 +27,13 @@ public class MappletView extends PApplet implements ActionListener {
     Minim minim;
     ATMView parent;
     PImage mapImg = null;
-    
-    
+
     int w, h;
     PFont font;
-    ArrayList <SoundZone> msz; //The zones in the map with associated sound files (e.g. recorded environmental sounds).
-    ArrayList <SegmentedZone> zones; //Zones on map as segregated blobs extracted from the image.
+    ArrayList<SoundZone> msz; //The zones in the map with associated sound files (e.g. recorded environmental sounds).
+    ArrayList<SegmentedZone> zones; //Zones on map as segregated blobs extracted from the image.
     boolean isMapLoaded = false;
+    PVector moveToPVector;
 
     ////Segmentation variables...
     ImageProcessor imgProcessor;
@@ -111,9 +111,10 @@ public class MappletView extends PApplet implements ActionListener {
     public void setSoundZones(ArrayList<SoundZone> sz_) {
         msz = sz_;
     }
+
     //Loads the array of zones on map image. May have associated sound file or may not.
-    public void setSegmentedZones(ArrayList<SegmentedZone>sz_){
-        zones=sz_;
+    public void setSegmentedZones(ArrayList<SegmentedZone> sz_) {
+        zones = sz_;
     }
 
     /**
@@ -126,36 +127,85 @@ public class MappletView extends PApplet implements ActionListener {
                     msz.get(i).getZoneSize(), msz.get(i).getZoneSize());
         }
     }
-   
+
 
     /*
      * mouse listeners and interaction handlers
      */
     @Override
-    public void mouseClicked() {
-        if (keyPressed && keyCode == SHIFT) {
-            println("MouseClicked Action 1");
-            action(1, mouseX, mouseY);
-        } else if (keyPressed && keyCode == CONTROL) {
-            println("MouseClicked Action 2");
-            action(2, mouseX, mouseY);
-        } else {
-            println("MouseClicked Action 0");
+    public void mousePressed() {
+        if (parent.controller.isInEditMode) {
+            //parent.controller.setMovingZoneIndex();
+            println("MousePressed ");
+            println("Moving zone is " + parent.controller.isMovingZone);
             action(0, mouseX, mouseY);
         }
 
     }
 
-   private void action(int n_, int x_, int y_) {
+    @Override
+    public void mouseReleased() {
+        if (parent.controller.isInEditMode && parent.controller.isMovingZone){
+            //parent.controller.setMovingZoneIndex(-1);
+            println("MouseReleased");
+            print("Moving zone is " + parent.controller.isMovingZone);
+            parent.controller.endMoveZone(new PVector(mouseX, mouseY));
+
+        }
+
+    }
+
+    @Override
+    public void mouseDragged() {
+        //if in edit mode indicate 'move to' position at location of mouse cursor
+        if (parent.controller.isInEditMode && !keyPressed && parent.controller.isMovingZone) {
+            //TODO: use index of zone being edited
+            fill(0, 255, 0, 200);
+            ellipse(mouseX, mouseY, msz.get(0).getZoneSize(), msz.get(0).getZoneSize());
+        } else if (parent.controller.isInEditMode && keyPressed && keyCode == SHIFT) {
+
+        }
+//        if (!keyPressed) {
+//            println("MouseDragged Action 1: move");
+//        } else if (keyPressed && keyCode == SHIFT) {
+//            println("MouseDragged Action 2: resize");
+//            //action(1, mouseX, mouseY);
+//        }
+    }
+
+    @Override
+    public void mouseClicked() {
+        if (!parent.controller.isInEditMode) {
+            if (keyPressed && keyCode == SHIFT) {
+                println("MouseClicked Action 1");
+                action(1, mouseX, mouseY);
+            } else if (keyPressed && keyCode == CONTROL) {
+                println("MouseClicked Action 2");
+                action(2, mouseX, mouseY);
+            } else {
+                println("MouseClicked Action 0");
+                action(0, mouseX, mouseY);
+            }
+        }
+    }
+
+    private void action(int n_, int x_, int y_) {
         int actionNo = n_;
         boolean keepChecking = true;
         //first check if over a sound zone
-
         for (int i = 0; i < msz.size(); i += 1) {
             if (msz.get(i).checkIfOver(x_, y_)) {
                 println("Over soundZone #" + msz.get(i).getId());
-                parent.controller.selectZone(msz, i, actionNo);
-                keepChecking = false;
+                if (!parent.controller.isInEditMode) {
+                    parent.controller.selectZone(msz, i, actionNo);
+                    keepChecking = false;
+                }
+                else{
+//                    parent.controller.setIsMovingZone(true);
+//                    parent.controller.setMovingZoneIndex(i);
+                    parent.controller.startMoveZone(msz, i);
+                    keepChecking = false;
+                }
                 break;
             }
         }
@@ -166,6 +216,7 @@ public class MappletView extends PApplet implements ActionListener {
         }
 
     }
+
     //Called if this has failed to find a SoundZone
     private void findSegmentedZone(int x_, int y_, int act_) {
         int xPos = x_;
@@ -182,17 +233,17 @@ public class MappletView extends PApplet implements ActionListener {
                 println(nString);
                 println(iString);
                 keepChecking = false;
-               
+
             } else if (activeBlobIndex == zones.get(i).getLabel()) {
                 println("Building name: " + zones.get(i).getZoneName());
                 println("Building info: " + zones.get(i).getZoneInfo());
-                parent.controller.selectZone(zones, i, actionNo);                
+                parent.controller.selectZone(zones, i, actionNo);
                 keepChecking = false;
             }
         }
         if (keepChecking) {
             println("This is not a campus building");
-            
+
         }
     }
 

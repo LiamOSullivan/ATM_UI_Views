@@ -58,7 +58,8 @@ public class ATMModel extends PApplet {
     String selfSoundDir = "null";
     String imageDir = "null";
 
-    boolean isModelLoaded = false;
+    boolean isModelLoaded = false, editMode = false;
+    
 
     //ImageProcessor imgProcessor; //class to process and segment the map image
 //  SoundZone [] soundZones, impulseSoundZones; 
@@ -196,6 +197,7 @@ public class ATMModel extends PApplet {
                     System.out.println("This segmented zone has an associated info audio file: " + infoSP);
                     segmentedZones.add(new SegmentedZone(this, i, label, name, info, nameSP, infoSP));
                 }
+                //xml.close();
                 System.out.println("***");
 
             }
@@ -248,10 +250,11 @@ public class ATMModel extends PApplet {
                         copyAsset(s.get(1).getAbsolutePath(), saveFilePath + "//sounds//spoken//info//" + s.get(1).getName());
                     }
                 }
+                
                 //copyAsset(imageFilePath, saveFilePath + "//sounds//spoken//" + imageFileName);
-//                String newFilePath = saveFilePath + "//" + file.getName();
-//                System.out.println("Creating file: " + newFilePath);
-//                writeXMLFile(newFilePath);
+                String newFilePath = saveFilePath + "//" + file.getName() +".xml";
+                System.out.println("Creating file: " + newFilePath);
+                writeXMLFile(newFilePath);
 //                try {
 //                    //output = new BufferedWriter(
 //                     //       new FileWriter(saveFilePath + "//" + file.getName() + ".xml"));
@@ -279,12 +282,18 @@ public class ATMModel extends PApplet {
     void writeXMLFile(String npf_) {
         String newFileP = npf_;
         //BufferedWriter out=o_;
-        if (defaultXMLPath != null) {
+        if (!isModelLoaded && defaultXMLPath != null) {
             XML newXML = loadXML(defaultXMLPath);
             if (newXML != null) {
-                println("Writing xml file");
+                println("Saving default xml file to "+newFileP);
                 saveXML(newXML, newFileP);
             }
+        }
+        else if(isModelLoaded){
+            println("Saving xml file to "+newFileP);
+            XML newXML = loadXML(openFilePath); 
+            saveXML(newXML, newFileP);
+            
         }
     }
 

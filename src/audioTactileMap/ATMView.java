@@ -42,6 +42,15 @@ public class ATMView extends javax.swing.JFrame {
         mapplet.setMapLoaded(true);
         mapplet.processMapImage();
 
+        //enable menu opitons following loading of map
+        //TODO: include check that map has loaded successfully
+        saveMenu.setEnabled(true);
+        saveMapAsMenuItem.setEnabled(true);
+        closeMenu.setEnabled(true);
+        audioSettingsMenuItem.setEnabled(true);
+        inputSettingsMenuItem.setEnabled(true);
+        findZonesMenuItem.setEnabled(true);
+
     }
 
     public void registerListener(ATMController c_) {
@@ -116,6 +125,7 @@ public class ATMView extends javax.swing.JFrame {
 
         saveMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         saveMenu.setText("Save Map");
+        saveMenu.setEnabled(false);
         saveMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveMenuActionPerformed(evt);
@@ -125,6 +135,7 @@ public class ATMView extends javax.swing.JFrame {
 
         saveMapAsMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         saveMapAsMenuItem.setText("Save Map As...");
+        saveMapAsMenuItem.setEnabled(false);
         saveMapAsMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveMapAsMenuItemActionPerformed(evt);
@@ -135,6 +146,7 @@ public class ATMView extends javax.swing.JFrame {
 
         closeMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
         closeMenu.setText("Close Map");
+        closeMenu.setEnabled(false);
         closeMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 closeMenuActionPerformed(evt);
@@ -155,6 +167,7 @@ public class ATMView extends javax.swing.JFrame {
         jMenuBar1.add(FileMenu);
 
         editMapMenuItem.setText("Edit");
+        editMapMenuItem.setEnabled(false);
         editMapMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editMapMenuItemActionPerformed(evt);
@@ -183,6 +196,7 @@ public class ATMView extends javax.swing.JFrame {
         SettingsMenu.setText("Settings");
 
         audioSettingsMenuItem.setText("Audio Settings...");
+        audioSettingsMenuItem.setEnabled(false);
         audioSettingsMenuItem.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 audioSettingsMenuItemStateChanged(evt);
@@ -197,6 +211,7 @@ public class ATMView extends javax.swing.JFrame {
         SettingsMenu.add(jSeparator3);
 
         inputSettingsMenuItem.setText("Input Settings...");
+        inputSettingsMenuItem.setEnabled(false);
         inputSettingsMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 inputSettingsMenuItemActionPerformed(evt);
@@ -206,6 +221,7 @@ public class ATMView extends javax.swing.JFrame {
         SettingsMenu.add(jSeparator4);
 
         findZonesMenuItem.setText("Find Zones...");
+        findZonesMenuItem.setEnabled(false);
         findZonesMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 findZonesMenuItemActionPerformed(evt);
@@ -251,17 +267,18 @@ public class ATMView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void saveMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMenuActionPerformed
-        fc = new JFileChooser();
-        System.out.println("Save File Selected");
-        int returnVal = fc.showSaveDialog(null);
-        System.out.println("val = " + returnVal);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = fc.getSelectedFile();
-            System.out.println("View: Save: " + file.getName() + "." + newline);
-            controller.saveFile(file);
-        } else {
-            System.out.println("Save command cancelled by user." + newline);
-        }
+//        fc = new JFileChooser();
+//        System.out.println("Save File Selected");
+//        int returnVal = fc.showSaveDialog(null);
+//        System.out.println("val = " + returnVal);
+//        if (returnVal == JFileChooser.APPROVE_OPTION) {
+//            File file = fc.getSelectedFile();
+//            System.out.println("View: Save: " + file.getName() + "." + newline);
+//            controller.saveFile(file);
+//        } else {
+//            System.out.println("Save command cancelled by user." + newline);
+//        }
+        //TODO: implement save to current map
     }//GEN-LAST:event_saveMenuActionPerformed
 
     private void closeMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeMenuActionPerformed
@@ -363,9 +380,15 @@ public class ATMView extends javax.swing.JFrame {
     }//GEN-LAST:event_audioSettingsMenuItemStateChanged
 
     private void EditMenuCheckboxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_EditMenuCheckboxItemStateChanged
-        // TODO add your handling code here:
         System.out.println("EditMenuCheckboxActionPerformed: "
                 + "Value is " + EditMenuCheckbox.getState());
+        if (controller.isMapLoaded()) {
+            System.out.println("CANNOT EDIT UNTIL MAP HAS BEEN LOADED!)");
+            controller.setEditMode(EditMenuCheckbox.getState());
+
+        } else {
+            EditMenuCheckbox.setState(false);
+        }
     }//GEN-LAST:event_EditMenuCheckboxItemStateChanged
 
     static private final String newline = "\n";

@@ -43,6 +43,7 @@
                   <KeyStroke key="Ctrl+S"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Save Map"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="saveMenuActionPerformed"/>
@@ -54,6 +55,7 @@
                   <KeyStroke key="Shift+Ctrl+S"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Save Map As..."/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="saveMapAsMenuItemActionPerformed"/>
@@ -67,6 +69,7 @@
                   <KeyStroke key="Ctrl+C"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Close Map"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="closeMenuActionPerformed"/>
@@ -90,6 +93,7 @@
         <Menu class="javax.swing.JMenu" name="editMapMenuItem">
           <Properties>
             <Property name="text" type="java.lang.String" value="Edit"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editMapMenuItemActionPerformed"/>
@@ -122,6 +126,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="audioSettingsMenuItem">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Audio Settings..."/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="audioSettingsMenuItemStateChanged"/>
@@ -133,6 +138,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="inputSettingsMenuItem">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Input Settings..."/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="inputSettingsMenuItemActionPerformed"/>
@@ -143,6 +149,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="findZonesMenuItem">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Find Zones..."/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="findZonesMenuItemActionPerformed"/>

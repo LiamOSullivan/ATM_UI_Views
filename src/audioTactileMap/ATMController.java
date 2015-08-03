@@ -20,8 +20,8 @@ public class ATMController extends PApplet {
 
     ATMView view;
     ATMModel model;
-    boolean MapEditMode = false;
-    
+    boolean isInEditMode = false, isMovingZone;
+    int soundZoneToMove = -1;
 
     ATMController(ATMModel m_, ATMView v_) {
         model = m_;
@@ -49,8 +49,8 @@ public class ATMController extends PApplet {
         //model.set(da.getModel()); //get the data loaded by the DAC and put in model       
         //TODO: use a listener to update model AFTER the data has been loaded from XML file.
     }
-    
-    void saveFile(File f_){
+
+    void saveFile(File f_) {
         File file = f_;
         System.out.println("Controller Saving: " + file.getName());
         try {
@@ -58,50 +58,80 @@ public class ATMController extends PApplet {
         } catch (IOException ex) {
             Logger.getLogger(ATMController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
 
     public String getImagePath() {
         return model.getImageFilePath();
     }
 
-    public ArrayList <SoundZone> getSoundZones() {
+    public ArrayList<SoundZone> getSoundZones() {
         return model.getSoundZones();
-            }
+    }
 
-    public ArrayList <SegmentedZone> getSegmentedZones() {
+    public ArrayList<SegmentedZone> getSegmentedZones() {
         return model.getSegmentedZones();
     }
+
+    public boolean isMapLoaded() {
+        return model.isModelLoaded;
+    }
+
+    public boolean isInEditMode() {
+        return isInEditMode;
+    }
+
+    void setEditMode(boolean b_) {
+         isInEditMode= b_;
+    }
+
+    void setIsMovingZone(boolean b_) {
+        isMovingZone = b_;
+    }   
+
+    public void resizeZone(ArrayList z_, int i_, int act_) {
+        
+        if (act_ == 2) {
+            //start resize Soundzone     
+            println("start resize sound zone #" + i_);
+        }
+        else if (act_ == 3) {
+            //end move Soundzone     
+            println("end resize sound zone #" + i_);
+        }
+    }
     
-    public void selectZone(ArrayList z_, int zi_, int act_){
-       playZoneSound(z_, zi_, act_);
-       
-   }
+    void startMoveZone(ArrayList z_, int i_){
+        println("start move sound zone #" + i_);
+        isMovingZone = true;
+        soundZoneToMove = i_;
+    }
+    
+    void endMoveZone(PVector endpt_){
+         println("end move sound zone #" + soundZoneToMove);
+         model.getSoundZones().get(soundZoneToMove).setZoneLocation(endpt_);
+         isMovingZone = false;
+         soundZoneToMove = -1;
+        
+    }
+
+    public void selectZone(ArrayList z_, int zi_, int act_) {
+        if(!isInEditMode) {
+            playZoneSound(z_, zi_, act_);
+        }
+    }
     
     public void playZoneSound(ArrayList z_, int i_, int st_) {
-        //Check if a SoundZone is playing, pause, rewind and play new sound
-        ArrayList<Zone> z =z_;
-//        ArrayList <SoundZone> soundZ;
-//        ArrayList <SegmentedZone> segZ;
+        //Check if a Zone's sound is playing, pause, rewind and play new sound as required
+        ArrayList<Zone> z = z_;
         int index = i_;
         int soundType = st_;
         int playingID = -1;
         boolean playing = false;
         Zone mszStop, mszPlay;
-//        if(z.get(0) instanceof SoundZone){
-//            for(int i=0; i<z.size();i+=1){
-//            soundZ.add((SoundZone) z.get(i));
-//            }
-//        
-//        }
-//        else{
-//            for(int i=0; i<z.size();i+=1){
-//            segZ.add((SegmentedZone) z.get(i));
-//            }
-//        }
-        
+
         //find the index of sound currently playing
-        for (int i = 0; i < model.getSoundZones().size(); i += 1) {
+        for (int i = 0; i < z.size(); i += 1) {
             System.out.println("check if playing #" + i);
             if (z.get(i).checkIfPlaying(soundType)) {
                 System.out.println("sound playing is #" + i);
@@ -123,9 +153,8 @@ public class ATMController extends PApplet {
                 mszPlay = z.get(index);
                 mszPlay.playSound(soundType); //play the new sound
                 mszPlay.rewindSound(soundType);
-            }
-            else{
-            //if selecting an already playing sound or if clicking in space, stop currently playing sound    
+            } else {
+                //if selecting an already playing sound or if clicking in space, stop currently playing sound    
                 System.out.println("Stopping sound: " + playingID);
                 mszStop = z.get(playingID);
                 mszStop.pauseSound(soundType);
