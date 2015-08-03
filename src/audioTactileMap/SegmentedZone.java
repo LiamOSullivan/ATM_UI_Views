@@ -55,7 +55,7 @@ class SegmentedZone extends Zone {
         return (sounds.get(1) != null);
 
     }
-
+    
     void setLabel(int l_) {
         zoneLabel = l_;
     }

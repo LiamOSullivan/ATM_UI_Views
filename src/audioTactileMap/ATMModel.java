@@ -48,8 +48,8 @@ public class ATMModel extends PApplet {
     //String mapDisplayPath;//, mapProcess, mapInfo, audioInfo; //Paths to data files
     PImage bg;
     //TODO: use accessors instead
-    public ArrayList <SoundZone> soundZones = new ArrayList();
-    public ArrayList <SegmentedZone> segmentedZones = new ArrayList();
+    public ArrayList<SoundZone> soundZones = new ArrayList();
+    public ArrayList<SegmentedZone> segmentedZones = new ArrayList();
 
     String localIPString = "null";
     String defaultDir = "null";
@@ -57,11 +57,10 @@ public class ATMModel extends PApplet {
     String spokenSoundDir = "null"; //path to audio files
     String selfSoundDir = "null";
     String imageDir = "null";
-    
+
     boolean isModelLoaded = false;
 
     //ImageProcessor imgProcessor; //class to process and segment the map image
-
 //  SoundZone [] soundZones, impulseSoundZones; 
 //  SoundManager envSoundManager, impulseSoundManager; //Stores audio files of different types
 //  AudioPlayer [] ttsReplace;// ***TODO: create SoundManager for this
@@ -109,7 +108,7 @@ public class ATMModel extends PApplet {
         openFileDir = openFilePath.substring(0, openFilePath.lastIndexOf(File.separator));
         System.out.println("Model is opening file: " + openFilePath);
         parseXMLFile(openFilePath);
-        isModelLoaded=true;
+        isModelLoaded = true;
     }
 
     void parseXMLFile(String f_) {
@@ -188,21 +187,17 @@ public class ATMModel extends PApplet {
                     System.out.println("\t name: " + name);
                     String info = zoneElement[i].getString("info");
                     System.out.println("Zone info: " + info);
-                    String f1 = zoneElement[i].getString("nameaudiofile");
-                    if (f1.equals("none")) {
-                        System.out.println("This segmented zone has no associated audio file");
-                        //TODO: Instantiate when no audio file alternative (subsequent use of TTS)
-                        //Zone(int i_, int l_, String n_, String info_)
-                        segmentedZones.add(new SegmentedZone(this, i, label, name, info));
-                    } else {
-                        String zoneSP = "" + openFileDir + spokenSoundDir + f1;
-                        System.out.println("This segmented zone has an associated audio file: " + zoneSP);
-                        //Zone(int i_, int l_, String n_, String info_, String audiofile)
-                        segmentedZones.add(new SegmentedZone(this, i, label, name, info, zoneSP));
-                    }
-                    System.out.println("***");
 
+                    String f1 = zoneElement[i].getString("nameaudiofile");
+                    String nameSP = "" + openFileDir + spokenSoundDir + "//name//" + f1;
+                    System.out.println("This segmented zone has an associated name audio file: " + nameSP);
+                    String f2 = zoneElement[i].getString("nameaudiofile");
+                    String infoSP = "" + openFileDir + spokenSoundDir + "//info//" + f2;
+                    System.out.println("This segmented zone has an associated info audio file: " + infoSP);
+                    segmentedZones.add(new SegmentedZone(this, i, label, name, info, nameSP, infoSP));
                 }
+                System.out.println("***");
+
             }
         }
     }
@@ -219,25 +214,39 @@ public class ATMModel extends PApplet {
             if (success) {
                 System.out.println("Created path: " + saveFilePath);
                 //create sub-directories
-                new File(saveFilePath + "//sounds//").mkdirs();
-                new File(saveFilePath + "//images//").mkdirs();
+                new File(saveFilePath + "//images").mkdirs();
+                new File(saveFilePath + "//sounds//spoken//name").mkdirs();
+                new File(saveFilePath + "//sounds//spoken//info").mkdirs();
                 new File(saveFilePath + "//sounds//environment").mkdirs();
                 new File(saveFilePath + "//sounds//self-produced").mkdirs();
                 new File(saveFilePath + "//sounds//spoken").mkdirs();
-                
+
                 //if a map hasn't been opened already, use the default resources
-                if(!isModelLoaded){
-                    loadFile(new File(defaultXMLPath));                   
+                if (!isModelLoaded) {
+                    loadFile(new File(defaultXMLPath));
                 }
                 copyAsset(imageFilePath, saveFilePath + "//images//" + imageFileName);
                 //copy all assets associated with SoundZones
-                for(int i=0;i<soundZones.size();i+=1){
-                ArrayList<File> s = soundZones.get(i).getSoundFiles();
-                //TODO: use enum to look up sound types, rather than hard coding in order
-                for(int j=0;j<s.size();j+=1){
-                copyAsset(s.get(j).getAbsolutePath(), saveFilePath + "//sounds//environment//" + s.get(j).getName());
-                copyAsset(s.get(j).getAbsolutePath(), saveFilePath + "//sounds//self-produced//" + s.get(j).getName());
+                for (int i = 0; i < soundZones.size(); i += 1) {
+                    ArrayList<File> s = soundZones.get(i).getSoundFiles();
+                    //TODO: use enum to look up sound types, rather than hard coding in order
+                    if (s.size() > 0) {
+                        copyAsset(s.get(0).getAbsolutePath(), saveFilePath + "//sounds//environment//" + s.get(0).getName());
+                    }
+                    if (s.size() > 1) {
+                        copyAsset(s.get(1).getAbsolutePath(), saveFilePath + "//sounds//self-produced//" + s.get(1).getName());
+                    }
                 }
+                //copy all assets associated with SegmentedZones
+                for (int i = 0; i < segmentedZones.size(); i += 1) {
+                    ArrayList<File> s = segmentedZones.get(i).getSoundFiles();
+                    //TODO: use enum to look up sound types, rather than hard coding in order
+                    if (s.size() > 0) {
+                        copyAsset(s.get(0).getAbsolutePath(), saveFilePath + "//sounds//spoken//name//" + s.get(0).getName());
+                    }
+                    if (s.size() > 1) {
+                        copyAsset(s.get(1).getAbsolutePath(), saveFilePath + "//sounds//spoken//info//" + s.get(1).getName());
+                    }
                 }
                 //copyAsset(imageFilePath, saveFilePath + "//sounds//spoken//" + imageFileName);
 //                String newFilePath = saveFilePath + "//" + file.getName();
@@ -288,8 +297,10 @@ public class ATMModel extends PApplet {
         Path targetP = src.toPath();
         try {
             Files.copy(src.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
         } catch (IOException ex) {
-            Logger.getLogger(ATMModel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ATMModel.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -297,11 +308,11 @@ public class ATMModel extends PApplet {
         return imageFilePath;
     }
 
-    public ArrayList <SoundZone> getSoundZones() {
+    public ArrayList<SoundZone> getSoundZones() {
         return soundZones;
     }
 
-    public ArrayList <SegmentedZone> getSegmentedZones() {
+    public ArrayList<SegmentedZone> getSegmentedZones() {
         return segmentedZones;
     }
 
