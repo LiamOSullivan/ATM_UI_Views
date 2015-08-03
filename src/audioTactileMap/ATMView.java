@@ -50,6 +50,7 @@ public class ATMView extends javax.swing.JFrame {
         audioSettingsMenuItem.setEnabled(true);
         inputSettingsMenuItem.setEnabled(true);
         findZonesMenuItem.setEnabled(true);
+        EditMenuCheckbox.setEnabled(true);
 
     }
 
@@ -167,7 +168,6 @@ public class ATMView extends javax.swing.JFrame {
         jMenuBar1.add(FileMenu);
 
         editMapMenuItem.setText("Edit");
-        editMapMenuItem.setEnabled(false);
         editMapMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editMapMenuItemActionPerformed(evt);
@@ -176,6 +176,7 @@ public class ATMView extends javax.swing.JFrame {
 
         EditMenuCheckbox.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
         EditMenuCheckbox.setText("Edit Map");
+        EditMenuCheckbox.setEnabled(false);
         EditMenuCheckbox.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 EditMenuCheckboxItemStateChanged(evt);

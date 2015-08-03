@@ -59,7 +59,6 @@ public class ATMModel extends PApplet {
     String imageDir = "null";
 
     boolean isModelLoaded = false, editMode = false;
-    
 
     //ImageProcessor imgProcessor; //class to process and segment the map image
 //  SoundZone [] soundZones, impulseSoundZones; 
@@ -250,9 +249,9 @@ public class ATMModel extends PApplet {
                         copyAsset(s.get(1).getAbsolutePath(), saveFilePath + "//sounds//spoken//info//" + s.get(1).getName());
                     }
                 }
-                
+
                 //copyAsset(imageFilePath, saveFilePath + "//sounds//spoken//" + imageFileName);
-                String newFilePath = saveFilePath + "//" + file.getName() +".xml";
+                String newFilePath = saveFilePath + "//" + file.getName() + ".xml";
                 System.out.println("Creating file: " + newFilePath);
                 writeXMLFile(newFilePath);
 //                try {
@@ -278,6 +277,31 @@ public class ATMModel extends PApplet {
         }
 
     }
+    //record any changes to model in XML file
+    XML updateXML(String fileToUpdate_) {
+        XML updatedFile = loadXML(fileToUpdate_);
+        if (updatedFile.hasChildren()) {
+            //get soundZones data and instantiate SoundZone objects in array
+            XML[] szse = updatedFile.getChildren("soundzones");
+            //println("Updating children with tag 'soundzones'");
+            if (szse.length > 0) {
+                XML[] sze = szse[0].getChildren("soundzone");
+                //println("There are " + soundZoneElement.length + " children with tag 'soundzone'");
+                for (int i = 0; i < sze.length; i++) {
+                    System.out.print("updating soundzone #" + i);
+                    int s = soundZones.get(i).getZoneSize();
+                    sze[i].setInt("size", s);
+                    //System.out.print("\t with size: " + s);
+                    float xPos = soundZones.get(i).getZonePosition().x;
+                    sze[i].setInt("xPos", (int) xPos);
+                    float yPos = soundZones.get(i).getZonePosition().y;
+                    sze[i].setInt("yPos", (int) yPos);
+                 }
+            }
+        }
+
+        return updatedFile;
+    }
 
     void writeXMLFile(String npf_) {
         String newFileP = npf_;
@@ -285,15 +309,13 @@ public class ATMModel extends PApplet {
         if (!isModelLoaded && defaultXMLPath != null) {
             XML newXML = loadXML(defaultXMLPath);
             if (newXML != null) {
-                println("Saving default xml file to "+newFileP);
+                println("Saving default xml file to " + newFileP);
                 saveXML(newXML, newFileP);
             }
-        }
-        else if(isModelLoaded){
-            println("Saving xml file to "+newFileP);
-            XML newXML = loadXML(openFilePath); 
+        } else if (isModelLoaded) {
+            println("Saving xml file to " + newFileP);
+            XML newXML = updateXML(openFilePath);
             saveXML(newXML, newFileP);
-            
         }
     }
 

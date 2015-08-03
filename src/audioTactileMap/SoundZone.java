@@ -18,7 +18,7 @@ import java.io.File;
 class SoundZone extends Zone {
 
     PVector loc;
-    float size;
+    int size;
     
     SoundZone(PApplet p_, int i_, PVector pv_) {
         this(p_, i_, pv_, 20.0F, "none", "none"); //supply default size and placeholder String for soundFiles
@@ -32,7 +32,7 @@ class SoundZone extends Zone {
     SoundZone(PApplet p_, int i_, PVector pv_, float s_, String f1_, String f2_) {
         super(p_, i_, f1_, f2_);
         loc = pv_;
-        size = s_;
+        size = (int)s_;
         
     }
 
@@ -40,7 +40,7 @@ class SoundZone extends Zone {
         loc = p_;
     }
 
-    void setZoneSize(float size_) {
+    void setZoneSize(int size_) {
         size = size_;
     }
 
@@ -48,7 +48,7 @@ class SoundZone extends Zone {
         return loc;
     }
 
-    public float getZoneSize() {
+    public int getZoneSize() {
         return size;
     }
     
