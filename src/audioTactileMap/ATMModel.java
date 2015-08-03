@@ -10,8 +10,6 @@ import java.nio.file.Path;
 import java.io.IOException;
 import java.io.BufferedWriter;
 import java.nio.file.StandardCopyOption;
-import java.io.FileWriter;
-import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -101,6 +99,10 @@ public class ATMModel extends PApplet {
         mapName = mapName_;
     }
 //TODO: catch all file load/ NPE errors
+
+    public File getFile() {
+        return file;
+    }
 
     void loadFile(File f_) {
         file = f_;
@@ -203,7 +205,11 @@ public class ATMModel extends PApplet {
         }
     }
 
-    void saveFile(File f_) throws IOException {
+    void saveFile() throws IOException {
+
+    }
+
+    void saveFileAs(File f_) throws IOException {
         System.out.println("Saving file to Model");
         file = f_;
         String saveFilePath = file.getAbsolutePath();
@@ -254,20 +260,6 @@ public class ATMModel extends PApplet {
                 String newFilePath = saveFilePath + "//" + file.getName() + ".xml";
                 System.out.println("Creating file: " + newFilePath);
                 writeXMLFile(newFilePath);
-//                try {
-//                    //output = new BufferedWriter(
-//                     //       new FileWriter(saveFilePath + "//" + file.getName() + ".xml"));
-//                    writeXMLFile(output);
-//                    System.out.println("Created file: " + saveFilePath + "//" + file.getName() + ".txt");
-//                } catch (IOException e) {
-//                    System.out.println("Error creating file: ");
-//                    e.printStackTrace();
-//                } finally {
-//                    if (output != null) {
-//                        System.out.println("Closing file ");
-//                        output.close();
-//                    }
-//                }
 
             } else {
                 System.out.println("Could not create path: " + file.getPath());
@@ -277,6 +269,7 @@ public class ATMModel extends PApplet {
         }
 
     }
+
     //record any changes to model in XML file
     XML updateXML(String fileToUpdate_) {
         XML updatedFile = loadXML(fileToUpdate_);
@@ -296,7 +289,7 @@ public class ATMModel extends PApplet {
                     sze[i].setInt("xPos", (int) xPos);
                     float yPos = soundZones.get(i).getZonePosition().y;
                     sze[i].setInt("yPos", (int) yPos);
-                 }
+                }
             }
         }
 

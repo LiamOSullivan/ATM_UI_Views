@@ -268,18 +268,7 @@ public class ATMView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void saveMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMenuActionPerformed
-//        fc = new JFileChooser();
-//        System.out.println("Save File Selected");
-//        int returnVal = fc.showSaveDialog(null);
-//        System.out.println("val = " + returnVal);
-//        if (returnVal == JFileChooser.APPROVE_OPTION) {
-//            File file = fc.getSelectedFile();
-//            System.out.println("View: Save: " + file.getName() + "." + newline);
-//            controller.saveFile(file);
-//        } else {
-//            System.out.println("Save command cancelled by user." + newline);
-//        }
-        //TODO: implement save to current map
+        controller.saveFile();
     }//GEN-LAST:event_saveMenuActionPerformed
 
     private void closeMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeMenuActionPerformed
@@ -322,7 +311,7 @@ public class ATMView extends javax.swing.JFrame {
     }//GEN-LAST:event_findZonesMenuItemActionPerformed
 
     private void editMapMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editMapMenuItemActionPerformed
-        // TODO add your handling code here:
+       
         System.out.println("***Edit Map Menu***");
     }//GEN-LAST:event_editMapMenuItemActionPerformed
 
@@ -336,7 +325,7 @@ public class ATMView extends javax.swing.JFrame {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();
             System.out.println("View: Saving As: " + file.getName() + "." + newline);
-            controller.saveFile(file);
+            controller.saveFileAs(file);
         } else {
             System.out.println("View: Save As command cancelled by user." + newline);
         }

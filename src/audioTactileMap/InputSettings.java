@@ -44,6 +44,11 @@ public class InputSettings extends javax.swing.JFrame {
         inputSaveButton.setText("Save");
 
         inputCancelButton.setText("Cancel");
+        inputCancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inputCancelButtonActionPerformed(evt);
+            }
+        });
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -119,6 +124,10 @@ public class InputSettings extends javax.swing.JFrame {
     private void jFormattedTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jFormattedTextField1ActionPerformed
+
+    private void inputCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputCancelButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inputCancelButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

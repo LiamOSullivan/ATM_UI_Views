@@ -44,17 +44,23 @@ public class ATMController extends PApplet {
         System.out.println("Controller Opening: " + file.getName());
         model.loadFile(file);
         view.updateMap(); //tells the view to update the ATM based on data in model
-        //view.setVisible(true);
-
-        //model.set(da.getModel()); //get the data loaded by the DAC and put in model       
         //TODO: use a listener to update model AFTER the data has been loaded from XML file.
     }
 
-    void saveFile(File f_) {
+     void saveFile() {
+        try {
+            model.saveFile();
+        } catch (IOException ex) {
+            Logger.getLogger(ATMController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+    
+    void saveFileAs(File f_) {
         File file = f_;
         System.out.println("Controller Saving: " + file.getName());
         try {
-            model.saveFile(file);
+            model.saveFileAs(file);
         } catch (IOException ex) {
             Logger.getLogger(ATMController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -91,14 +97,14 @@ public class ATMController extends PApplet {
 
     public void resizeZone(ArrayList z_, int i_, int act_) {
         
-        if (act_ == 2) {
-            //start resize Soundzone     
-            println("start resize sound zone #" + i_);
-        }
-        else if (act_ == 3) {
-            //end move Soundzone     
-            println("end resize sound zone #" + i_);
-        }
+//        if (act_ == 2) {
+//            //start resize Soundzone     
+//            println("start resize sound zone #" + i_);
+//        }
+//        else if (act_ == 3) {
+//            //end move Soundzone     
+//            println("end resize sound zone #" + i_);
+//        }
     }
     
     void startMoveZone(ArrayList z_, int i_){
@@ -114,7 +120,7 @@ public class ATMController extends PApplet {
          soundZoneToMove = -1;
         
     }
-
+    
     public void selectZone(ArrayList z_, int zi_, int act_) {
         if(!isInEditMode) {
             playZoneSound(z_, zi_, act_);

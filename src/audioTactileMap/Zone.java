@@ -77,8 +77,14 @@ class Zone {
         return soundFiles;
 
     }
+    
 
-    void setSoundFilePaths() {
+    void setSoundFile1Path(File f_) {
+        //TODO if accessor needed
+
+    }
+    
+    void setSoundFile2Path(File f_) {
         //TODO if accessor needed
 
     }
