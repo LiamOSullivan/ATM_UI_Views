@@ -19,7 +19,7 @@ public class SoundZonePopup extends javax.swing.JFrame {
      * Creates new form SoundZonePopup
      */
     SoundZone z;
-    int id;
+    int id, size;
     String title;
     String envSoundPath, selfSoundPath;
     ATMView viewRef;
@@ -31,6 +31,21 @@ public class SoundZonePopup extends javax.swing.JFrame {
         selfSoundPath = z.getSoundFilePaths().get(1);
         initComponents();
         this.setVisible(true);
+    }
+    
+    private void save() {
+        //Save all changes to SegmentedZone in model
+        z.setZoneSize(size);
+        
+    }
+
+    private void saveAndClose() {
+        save();
+        this.dispose();
+    }
+
+    private void cancel() {
+        this.dispose();
     }
 
     /**
@@ -216,9 +231,9 @@ public class SoundZonePopup extends javax.swing.JFrame {
     private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider1StateChanged
         
         JSlider source = (JSlider) evt.getSource();
-        int val = source.getValue();
-        System.out.println("Size slider changed to: "+val);
-        z.setZoneSize(val);
+        size = source.getValue();
+        System.out.println("Size slider changed to: "+size);
+        
     }//GEN-LAST:event_jSlider1StateChanged
 
 
