@@ -40,7 +40,6 @@ public class ATMController extends PApplet {
 //    
 //    }
     void loadFile(File f_) {
-
         fileName = f_;
         System.out.println("Controller Opening: " + fileName.getName());
         model.loadFile(fileName);
@@ -132,7 +131,17 @@ public class ATMController extends PApplet {
 
     public void selectZone(ArrayList z_, int zi_, int act_) {
         if (!isInEditMode) {
-            playZoneSound(z_, zi_, act_);
+            
+            int soundToPlay;
+            if(act_==1){
+                
+                playZoneSound(z_, zi_, 0);
+            }
+            else if(act_==2){
+                soundToPlay=1;
+                playZoneSound(z_, zi_, 1);
+            }
+            
         }
     }
 

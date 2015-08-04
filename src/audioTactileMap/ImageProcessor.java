@@ -19,7 +19,7 @@ class ImageProcessor {
 
     ImageProcessor(PApplet parent_, PImage iPath_) { //Initialise with path to file
         parent = parent_;
-        processImg = iPath_;
+        processImg = iPath_.get();//make a copy for processing
     }
 
 //    void loadFile() {
@@ -28,7 +28,6 @@ class ImageProcessor {
 //    }
 
     void process() {
-        
         if (processImg != null) {
             // analyse processImg
             processImg.filter(PConstants.THRESHOLD);
@@ -36,7 +35,8 @@ class ImageProcessor {
             processImg.loadPixels();
             scanForBlobs();
             int val = findLargestBlobWeight();
-      //settingsGUI.minWeightSlider.setRange(minBlobSize, val);
+            //bd.findCentroids();
+            //settingsGUI.minWeightSlider.setRange(minBlobSize, val);
             //settingsGUI.minWeightSlider.setValue(minBlobSize);
         }
     }
@@ -47,13 +47,10 @@ class ImageProcessor {
         segmentationStartTime = parent.millis(); 
         System.out.println("Finding blobs...");
         bd.findBlobs(processImg.pixels, processImg.width, processImg.height);
-    // to be called always before using a method 
-        // returning or processing a blob's feature
+        //bd.imageFindBlobs(processImg);
         System.out.println("Blobs found in " + (parent.millis() - segmentationStartTime) + " ms");
         System.out.println("Total # of blobs is " + bd.getBlobsNumber());
-    //    System.out.println("Loading blobs' features..."); 
-
-    //bd.drawSelectBox(wMax, color(0, 255, 0), 2.0); //draw largest blob bounds (blob features required)
+        //bd.drawSelectBox(wMax, color(0, 255, 0), 2.0); //draw largest blob bounds (blob features required)
         //System.out.println("Drawing done in "+(millis()-segmentationStartTime)+" ms"); 
         //activeBlobVectors = bd.getBlobPixelsLocation(maxBlobIndex);
     }
@@ -80,14 +77,24 @@ class ImageProcessor {
             }
         }
 
-    //    System.out.println("Weights calculated in "+(millis()-segmentationStartTime)+" ms"); 
-        //    System.out.println("wMax is "+wMax+"\t wMin is "+wMin); 
+        //System.out.println("Weights calculated in "+(millis()-segmentationStartTime)+" ms"); 
+        System.out.println("wMax is "+wMax+"\t wMin is "+wMin); 
         return wMax;
     }
 
-//    void showAllContours() {
-//      bd.drawSelectContours(minBlobSize, color(255, 0, 0), 2.0); //draw select blob outline
-//    }
+    void showAllContours() {
+      bd.drawSelectContours(20, parent.color(255, 0, 0), 2.0F); //draw select blob outline
+    }
+    
+    void showContour(int lbl_) {
+      bd.drawBlobContour(lbl_, parent.color(255, 0, 0), 2.0F); //draw select blob outline
+    }
+    
+    PVector findCentroid(int lbl_){
+        return new PVector (bd.getCentroidX(lbl_), bd.getCentroidY(lbl_));
+        
+    }
+      
     ///////////////////////////////////////////////////////Getter/ Setter////////////
     PImage getProcessedImage() {
         return processImg;

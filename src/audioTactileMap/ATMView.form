@@ -117,6 +117,26 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="View"/>
           </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="showSegmentedCheckbox">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Show Segmented Zones"/>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
+              <Events>
+                <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="showSegmentedCheckboxStateChanged"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="showSegmentedLabelsCheckbox">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Show Segmented Labels"/>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
+              <Events>
+                <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="showSegmentedLabelsCheckboxStateChanged"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="SettingsMenu">
           <Properties>

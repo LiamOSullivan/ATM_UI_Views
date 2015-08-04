@@ -39,24 +39,24 @@ public class ATMView extends javax.swing.JFrame {
     public void updateMap() {
         fileName=controller.getFileName();
         title += ": "+fileName;
+        
         initComponents(); //menus etc.
         mapplet.setMapImage(controller.getImagePath());
-        mapplet.processMapImage();
         mapplet.setSoundZones(controller.getSoundZones());
         mapplet.setSegmentedZones(controller.getSegmentedZones());
-        mapplet.setMapLoaded(true);
-        
-        
+        mapplet.processMapImage();
+        mapplet.setMapLoaded(true);      
 
         //enable menu opitons following loading of map
-        //TODO: include check that map has loaded successfully
-        saveMenu.setEnabled(true);
+         saveMenu.setEnabled(true);
         saveMapAsMenuItem.setEnabled(true);
         closeMenu.setEnabled(true);
         audioSettingsMenuItem.setEnabled(true);
         inputSettingsMenuItem.setEnabled(true);
         findZonesMenuItem.setEnabled(true);
         EditMenuCheckbox.setEnabled(true);
+        showSegmentedCheckbox.setEnabled(true);
+        showSegmentedLabelsCheckbox.setEnabled(true);
 
     }
 
@@ -91,6 +91,8 @@ public class ATMView extends javax.swing.JFrame {
         editMapMenuItem = new javax.swing.JMenu();
         EditMenuCheckbox = new javax.swing.JCheckBoxMenuItem();
         viewMenu = new javax.swing.JMenu();
+        showSegmentedCheckbox = new javax.swing.JCheckBoxMenuItem();
+        showSegmentedLabelsCheckbox = new javax.swing.JCheckBoxMenuItem();
         SettingsMenu = new javax.swing.JMenu();
         audioSettingsMenuItem = new javax.swing.JMenuItem();
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
@@ -199,6 +201,25 @@ public class ATMView extends javax.swing.JFrame {
         jMenuBar1.add(editMapMenuItem);
 
         viewMenu.setText("View");
+
+        showSegmentedCheckbox.setText("Show Segmented Zones");
+        showSegmentedCheckbox.setEnabled(false);
+        showSegmentedCheckbox.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                showSegmentedCheckboxStateChanged(evt);
+            }
+        });
+        viewMenu.add(showSegmentedCheckbox);
+
+        showSegmentedLabelsCheckbox.setText("Show Segmented Labels");
+        showSegmentedLabelsCheckbox.setEnabled(false);
+        showSegmentedLabelsCheckbox.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                showSegmentedLabelsCheckboxStateChanged(evt);
+            }
+        });
+        viewMenu.add(showSegmentedLabelsCheckbox);
+
         jMenuBar1.add(viewMenu);
 
         SettingsMenu.setText("Settings");
@@ -313,6 +334,7 @@ public class ATMView extends javax.swing.JFrame {
     private void findZonesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_findZonesMenuItemActionPerformed
         // TODO add your handling code here:
         System.out.println("FindZones action performed: ");
+        //mapplet.findSegmentedCentroids();
         FindZonesSettings fz = new FindZonesSettings();
         fz.setVisible(true);
     }//GEN-LAST:event_findZonesMenuItemActionPerformed
@@ -381,13 +403,39 @@ public class ATMView extends javax.swing.JFrame {
         System.out.println("EditMenuCheckboxActionPerformed: "
                 + "Value is " + EditMenuCheckbox.getState());
         if (controller.isMapLoaded()) {
-            System.out.println("CANNOT EDIT UNTIL MAP HAS BEEN LOADED!)");
             controller.setEditMode(EditMenuCheckbox.getState());
+            mapplet.setEditView(EditMenuCheckbox.getState());
 
         } else {
             EditMenuCheckbox.setState(false);
         }
     }//GEN-LAST:event_EditMenuCheckboxItemStateChanged
+
+    private void showSegmentedCheckboxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_showSegmentedCheckboxStateChanged
+        System.out.println("ViewMenuCheckboxActionPerformed: "
+                + "Value is " + showSegmentedCheckbox.getState());
+        if (controller.isMapLoaded()) {
+            mapplet.setShowSegmented(showSegmentedCheckbox.getState());
+            
+
+        } else {
+            showSegmentedCheckbox.setState(false);
+        }
+    }//GEN-LAST:event_showSegmentedCheckboxStateChanged
+
+    private void showSegmentedLabelsCheckboxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_showSegmentedLabelsCheckboxStateChanged
+        System.out.println("ViewMenuCheckboxActionPerformed: "
+                + "Value is " + showSegmentedLabelsCheckbox.getState());
+        if (controller.isMapLoaded()) {
+            mapplet.setShowSegmentedLabels(showSegmentedLabelsCheckbox.getState());
+            
+
+        } else {
+            showSegmentedLabelsCheckbox.setState(false);
+        }
+        
+        
+    }//GEN-LAST:event_showSegmentedLabelsCheckboxStateChanged
 
     static private final String newline = "\n";
     JButton openButton, saveButton;
@@ -419,6 +467,8 @@ public class ATMView extends javax.swing.JFrame {
     private javax.swing.JMenuItem openMenu;
     private javax.swing.JMenuItem saveMapAsMenuItem;
     private javax.swing.JMenuItem saveMenu;
+    private javax.swing.JCheckBoxMenuItem showSegmentedCheckbox;
+    private javax.swing.JCheckBoxMenuItem showSegmentedLabelsCheckbox;
     private javax.swing.JMenu viewMenu;
     // End of variables declaration//GEN-END:variables
 }

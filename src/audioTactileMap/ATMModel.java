@@ -57,39 +57,7 @@ public class ATMModel extends PApplet {
     String imageDir = "null";
 
     boolean isModelLoaded = false, editMode = false;
-
-    //ImageProcessor imgProcessor; //class to process and segment the map image
-//  SoundZone [] soundZones, impulseSoundZones; 
-//  SoundManager envSoundManager, impulseSoundManager; //Stores audio files of different types
-//  AudioPlayer [] ttsReplace;// ***TODO: create SoundManager for this
-//  float MapSoundZoneSize = 0;
-//  boolean showMapSoundZones = false, showMapSoundZoneIndexes = false;
-//  boolean useEnvSounds = true, useImpulseSounds = true; //use background & self-produced sounds with map
-//  //PVector fingerPosition;
-//  int fingerCount = 0;
-//  boolean calibrating = false, calibrated = false, calibratePosition =false, calibrateSize = false;
-//  int CALIBRATION_TIME = 15000; //time in millis that position, width and height are each set.
-//  int calStart = 0; 
-//  AudioPlayer routeStart, routeEnd;
-//  AudioPlayer [] routeSteps;
-//  int routeStepNo = 0;
-//  boolean routeMode = false;
-//
-//  boolean drawCircles = true, drawCoords=false;
-//  Rulers rulers;
-//
-//  MapDisplay(PApplet parentSketch_, int w_, int h_, String mapDisplay_, String mapProcess_, 
-//  String mapInfo_, String audioInfo_, String audioPath_ ) {
-//    parentSketch=parentSketch_;
-//    w=w_;
-//    h=h_;
-//    //paths...
-//    mapDisplay = mapDisplay_; //the digital map image file
-//    mapProcess = mapProcess_; //image file to be segmented (if different)
-//    mapInfo = mapInfo_; //text file with zone labels
-//    audioPath = audioPath_; //this will include the sub folder for either 'campus' or 'queens'
-//    audioInfo = audioInfo_; //the text file with sound locations
-//  }
+    
     //Construct with empty map
     ATMModel() {
 
@@ -189,14 +157,19 @@ public class ATMModel extends PApplet {
                     System.out.println("\t name: " + name);
                     String info = zoneElement[i].getString("info");
                     System.out.println("Zone info: " + info);
+                           
 
                     String f1 = zoneElement[i].getString("nameaudiofile");
                     String nameSP = "" + openFileDir + spokenSoundDir + "//name//" + f1;
                     System.out.println("This segmented zone has an associated name audio file: " + nameSP);
-                    String f2 = zoneElement[i].getString("nameaudiofile");
+                    String f2 = zoneElement[i].getString("infoaudiofile");
                     String infoSP = "" + openFileDir + spokenSoundDir + "//info//" + f2;
                     System.out.println("This segmented zone has an associated info audio file: " + infoSP);
                     segmentedZones.add(new SegmentedZone(this, i, label, name, info, nameSP, infoSP));
+                    
+//                    PVector pv = new PVector(zoneElement[i].getFloat("centroidX"), zoneElement[i].getFloat("centroidX"));
+//                    segmentedZones.get(i).setCentroid(pv);
+//                    System.out.println("Segmented zone has centroid: " + segmentedZones.get(i).getCentroid());
                 }
                 //xml.close();
                 System.out.println("***");

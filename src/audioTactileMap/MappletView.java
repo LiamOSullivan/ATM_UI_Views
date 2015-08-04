@@ -7,14 +7,9 @@ package audioTactileMap;
 
 import processing.core.*;
 import ddf.minim.*;
-import blobscanner.*; //Blobscanner library v. 0.1-a by Antonio Molinaro
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import javax.imageio.ImageIO;
-import javax.swing.JFileChooser;
 
 /**
  * The MappletView is a PApplet used to display the background map image and
@@ -35,11 +30,13 @@ public class MappletView extends PApplet implements ActionListener {
     ArrayList<SegmentedZone> zones; //Zones on map as segregated blobs extracted from the image.
     boolean isMapLoaded = false;
     PVector moveToPVector;
+    boolean editView = false;
 
     ////Segmentation variables...
     ImageProcessor imgProcessor;
     int activeBlobIndex = -1, activeBlobLabel = -1;
-    boolean showAllContours = false;
+    boolean showAllContours = true; //highlight all the segmented blobs
+    boolean showSegmentedZones = true, showSegmentedLabels = false; //higlight just the stored SegmentedZones 
     int MIN_BLOB_SIZE = 20; //heuristic for ignoring small blobs
     int maxBlobSize, minBlobSize = MIN_BLOB_SIZE; //adjustable from settings GUI
     int segmentationStartTime; //Used to time blob detection and segmentation
@@ -64,7 +61,15 @@ public class MappletView extends PApplet implements ActionListener {
         if (isMapLoaded) {
             if (mapImg != null) {
                 image(mapImg, 0, 0, this.width, this.height);
+                if (editView) {
+                    imgProcessor.showAllContours(); //highlight all blobs for editing
+                } else {
+                    if (showSegmentedZones) {
+                        drawSegmentedZones(); //highlight just the segmented zones
+                    }
+                }
             }
+
             drawSoundZones();
 
         } else {
@@ -106,6 +111,17 @@ public class MappletView extends PApplet implements ActionListener {
     void processMapImage() {
         imgProcessor = new ImageProcessor(this, mapImg);
         imgProcessor.process();
+        //findSegmentedCentroids();
+
+    }
+
+    void findSegmentedCentroids() {
+        for (int i = 0; i < zones.size(); i += 1) {
+            System.out.println("Mapplet finding centroids");
+            PVector pv = imgProcessor.findCentroid(zones.get(i).getLabel());
+            zones.get(i).setCentroid(pv);
+            System.out.println("Mapplet successfully set centroid " + i + " @ " + zones.get(i).getCentroid());
+        }
     }
 
     //Loads the array of zones with asscoiated sound files
@@ -127,12 +143,34 @@ public class MappletView extends PApplet implements ActionListener {
             ellipse(msz.get(i).getZonePosition().x, msz.get(i).getZonePosition().y,
                     msz.get(i).getZoneSize(), msz.get(i).getZoneSize());
         }
-        if (parent.controller.isInEditMode && !keyPressed && parent.controller.isMovingZone) {
+        if (parent.controller.isInEditMode && parent.controller.isMovingZone) {
             fill(0, 255, 0, 200);
             ellipse(moveToPVector.x, moveToPVector.y, msz.get(0).getZoneSize(), msz.get(0).getZoneSize());
         }
     }
 
+    void drawSegmentedZones() {
+        for (int i = 0; i < zones.size(); i += 1) {
+            imgProcessor.showContour(zones.get(i).getLabel());
+            if (showSegmentedLabels) {
+                text(zones.get(i).getLabel(), zones.get(i).getCentroid().x, zones.get(i).getCentroid().y);
+            }
+        }
+
+    }
+
+    void setEditView(boolean b_) {
+        editView = b_;
+
+    }
+
+    void setShowSegmented(boolean b_) {
+        showSegmentedZones = b_;
+    }
+
+    void setShowSegmentedLabels(boolean b_) {
+        showSegmentedLabels = b_;
+    }
 
     /*
      * mouse listeners and interaction handlers
@@ -141,8 +179,8 @@ public class MappletView extends PApplet implements ActionListener {
     public void mousePressed() {
         if (parent.controller.isInEditMode) {
             println("MousePressed ");
-            if (!keyPressed) {
-                action(0, mouseX, mouseY);
+            if (keyPressed && keyCode == SHIFT) {
+                action(0, mouseX, mouseY); //start move
             }
         }
     }
@@ -150,9 +188,11 @@ public class MappletView extends PApplet implements ActionListener {
     @Override
     public void mouseReleased() {
         if (parent.controller.isInEditMode && parent.controller.isMovingZone) {
-            println("MouseReleased");
-            print("Moving zone is " + parent.controller.isMovingZone);
-            parent.controller.endMoveZone(new PVector(mouseX, mouseY));
+            if (keyPressed && keyCode == SHIFT) {
+                println("MouseReleased");
+                print("Moving zone is " + parent.controller.isMovingZone);
+                parent.controller.endMoveZone(new PVector(mouseX, mouseY));
+            }
         }
 
     }
@@ -160,10 +200,13 @@ public class MappletView extends PApplet implements ActionListener {
     @Override
     public void mouseDragged() {
         //if in edit mode indicate 'move to' position at location of mouse cursor
-        if (parent.controller.isInEditMode && !keyPressed && parent.controller.isMovingZone) {
+        if (parent.controller.isInEditMode
+                && keyPressed
+                && keyCode == SHIFT
+                && parent.controller.isMovingZone) {
             moveToPVector.x = mouseX;
             moveToPVector.y = mouseY;
-        } else if (parent.controller.isInEditMode && keyPressed && keyCode == SHIFT) {
+        } else if (parent.controller.isInEditMode && keyPressed && keyCode == CONTROL) {
             //TODO : resize soundzone
         }
     }
@@ -172,22 +215,22 @@ public class MappletView extends PApplet implements ActionListener {
     public void mouseClicked() {
         if (!parent.controller.isInEditMode) {
             if (keyPressed && keyCode == SHIFT) {
-                println("MouseClicked Action 1");
-                action(1, mouseX, mouseY);
+                println("MouseClicked Action 0");
+                action(0, mouseX, mouseY);
             } else if (keyPressed && keyCode == CONTROL) {
                 println("MouseClicked Action 2");
                 action(2, mouseX, mouseY);
             } else {
-                println("MouseClicked Action 0");
-                action(0, mouseX, mouseY);
+                println("MouseClicked Action 1");
+                action(1, mouseX, mouseY);
             }
         } else {
-            //click + CNTRL in edit mode brings up file selection popup
+            //click in edit mode brings up file selection popup
             System.out.println("Click in Mapplet in Edit Mode ");
-            if (keyPressed && keyCode == CONTROL) {
-                if (parent.controller.model.isModelLoaded) {
-                    action(2, mouseX, mouseY);
-                }
+            if (!keyPressed) {
+                action(1, mouseX, mouseY);
+            } else if (keyPressed && keyCode == SHIFT) {
+
             }
 
         }
@@ -211,10 +254,11 @@ public class MappletView extends PApplet implements ActionListener {
                             moveToPVector = new PVector(mouseX, mouseY);
 
                         } else if (actionNo == 1) {
+                            //Click in Edit mode opens JFrame editor for SoundZone
+                            SoundZonePopup p = new SoundZonePopup(parent, msz.get(i));
 
                         } else if (actionNo == 2) {
-                            //CNTRL-Click in Edit mode opens JFrame editor for SoundZone
-                            SoundZonePopup p = new SoundZonePopup(parent, msz.get(i));
+
                         }
                         keepChecking = false;
                         break;
@@ -248,8 +292,20 @@ public class MappletView extends PApplet implements ActionListener {
             } else if (activeBlobIndex == zones.get(i).getLabel()) {
                 println("Building name: " + zones.get(i).getZoneName());
                 println("Building info: " + zones.get(i).getZoneInfo());
-                parent.controller.selectZone(zones, i, actionNo);
-                keepChecking = false;
+                if (!parent.controller.isInEditMode) {
+                    parent.controller.selectZone(zones, i, actionNo);
+                    keepChecking = false;
+                } else {
+                    if (actionNo == 0) {
+                    
+                    } else if (actionNo == 1) {
+                     //Click in Edit mode opens JFrame editor for SegmentedZone
+                     SegmentedZonePopup p = new SegmentedZonePopup(parent, zones.get(i));
+
+                    } else if (actionNo == 2) {
+
+                    }
+                }
             }
         }
         if (keepChecking) {

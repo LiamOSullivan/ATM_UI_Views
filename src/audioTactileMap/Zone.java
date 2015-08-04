@@ -38,7 +38,7 @@ class Zone {
             if (new File(soundFilePaths.get(i)).exists()) {
                 soundFiles.add(new File(soundFilePaths.get(i)));
                 sounds.add(minim.loadFile(soundFilePaths.get(i)));
-                System.out.println("Zone loaded sound file #" + i);
+                System.out.println("Zone loaded sound file #" + i+" "+soundFilePaths);
             } else {
                 System.out.println("Zone could not find file #" + i);
             }

@@ -21,6 +21,7 @@ class SegmentedZone extends Zone {
 
     String name, info;
     int zoneLabel;
+    PVector centroid = new PVector(-1,-1);
     
     //Constructor for zones with only a reference to the parent model and an index number
     SegmentedZone(PApplet p_, int i_) {
@@ -78,6 +79,15 @@ class SegmentedZone extends Zone {
 
     String getZoneInfo() {
         return info;
+    }
+    
+    void setCentroid(PVector c_){
+        centroid=c_;
+        
+    }
+    PVector getCentroid(){
+        return centroid;
+        
     }
     
     
