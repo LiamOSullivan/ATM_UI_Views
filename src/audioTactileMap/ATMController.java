@@ -1,6 +1,6 @@
 /*
  * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To change this template fileName, choose Tools | Templates
  * and open the template in the editor.
  */
 package audioTactileMap;
@@ -22,6 +22,7 @@ public class ATMController extends PApplet {
     ATMModel model;
     boolean isInEditMode = false, isMovingZone;
     int soundZoneToMove = -1;
+    File fileName;
 
     ATMController(ATMModel m_, ATMView v_) {
         model = m_;
@@ -40,14 +41,17 @@ public class ATMController extends PApplet {
 //    }
     void loadFile(File f_) {
 
-        File file = f_;
-        System.out.println("Controller Opening: " + file.getName());
-        model.loadFile(file);
+        fileName = f_;
+        System.out.println("Controller Opening: " + fileName.getName());
+        model.loadFile(fileName);
         view.updateMap(); //tells the view to update the ATM based on data in model
-        //TODO: use a listener to update model AFTER the data has been loaded from XML file.
+        //TODO: use a listener to update model AFTER the data has been loaded from XML fileName.
+        
     }
 
-     void saveFile() {
+    void saveFile() {
+
+        System.out.println("Controller Save");
         try {
             model.saveFile();
         } catch (IOException ex) {
@@ -55,16 +59,21 @@ public class ATMController extends PApplet {
         }
 
     }
-    
+
     void saveFileAs(File f_) {
         File file = f_;
-        System.out.println("Controller Saving: " + file.getName());
+        System.out.println("Controller Save As: " + file.getName());
         try {
             model.saveFileAs(file);
         } catch (IOException ex) {
             Logger.getLogger(ATMController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        //loadFile(file);//After 'Save As' open new saved map
 
+    }
+    
+    public String getFileName(){
+        return fileName.getName();
     }
 
     public String getImagePath() {
@@ -88,15 +97,15 @@ public class ATMController extends PApplet {
     }
 
     void setEditMode(boolean b_) {
-         isInEditMode= b_;
+        isInEditMode = b_;
     }
 
     void setIsMovingZone(boolean b_) {
         isMovingZone = b_;
-    }   
+    }
 
     public void resizeZone(ArrayList z_, int i_, int act_) {
-        
+
 //        if (act_ == 2) {
 //            //start resize Soundzone     
 //            println("start resize sound zone #" + i_);
@@ -106,27 +115,27 @@ public class ATMController extends PApplet {
 //            println("end resize sound zone #" + i_);
 //        }
     }
-    
-    void startMoveZone(ArrayList z_, int i_){
+
+    void startMoveZone(ArrayList z_, int i_) {
         println("start move sound zone #" + i_);
         isMovingZone = true;
         soundZoneToMove = i_;
     }
-    
-    void endMoveZone(PVector endpt_){
-         println("end move sound zone #" + soundZoneToMove);
-         model.getSoundZones().get(soundZoneToMove).setZoneLocation(endpt_);
-         isMovingZone = false;
-         soundZoneToMove = -1;
-        
+
+    void endMoveZone(PVector endpt_) {
+        println("end move sound zone #" + soundZoneToMove);
+        model.getSoundZones().get(soundZoneToMove).setZoneLocation(endpt_);
+        isMovingZone = false;
+        soundZoneToMove = -1;
+
     }
-    
+
     public void selectZone(ArrayList z_, int zi_, int act_) {
-        if(!isInEditMode) {
+        if (!isInEditMode) {
             playZoneSound(z_, zi_, act_);
         }
     }
-    
+
     public void playZoneSound(ArrayList z_, int i_, int st_) {
         //Check if a Zone's sound is playing, pause, rewind and play new sound as required
         ArrayList<Zone> z = z_;

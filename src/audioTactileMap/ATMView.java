@@ -20,6 +20,7 @@ public class ATMView extends javax.swing.JFrame {
 
     ATMController controller;
     MappletView mapplet;
+    String fileName, title = "Audio Tactile Map";
 
     /**
      * Creates new form ATMFrame
@@ -36,11 +37,16 @@ public class ATMView extends javax.swing.JFrame {
 
     //called by ATMController after it has loaded an ATMModel
     public void updateMap() {
+        fileName=controller.getFileName();
+        title += ": "+fileName;
+        initComponents(); //menus etc.
         mapplet.setMapImage(controller.getImagePath());
+        mapplet.processMapImage();
         mapplet.setSoundZones(controller.getSoundZones());
         mapplet.setSegmentedZones(controller.getSegmentedZones());
         mapplet.setMapLoaded(true);
-        mapplet.processMapImage();
+        
+        
 
         //enable menu opitons following loading of map
         //TODO: include check that map has loaded successfully
@@ -100,6 +106,7 @@ public class ATMView extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTextArea1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle(title);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -326,6 +333,7 @@ public class ATMView extends javax.swing.JFrame {
             File file = fc.getSelectedFile();
             System.out.println("View: Saving As: " + file.getName() + "." + newline);
             controller.saveFileAs(file);
+            
         } else {
             System.out.println("View: Save As command cancelled by user." + newline);
         }

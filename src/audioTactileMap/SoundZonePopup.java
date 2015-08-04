@@ -7,6 +7,7 @@ package audioTactileMap;
 
 import java.io.File;
 import javax.swing.JFileChooser;
+import javax.swing.JSlider;
 
 /**
  *
@@ -81,6 +82,16 @@ public class SoundZonePopup extends javax.swing.JFrame {
         jLabel1.setText("Environmental Sound File");
 
         jLabel2.setText("Self-Produced Sound File");
+
+        jSlider1.setMaximum(200);
+        jSlider1.setMinimum(10);
+        jSlider1.setValue(z.getZoneSize()
+        );
+        jSlider1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSlider1StateChanged(evt);
+            }
+        });
 
         jLabel3.setText("Sound Zone Size");
 
@@ -172,7 +183,6 @@ public class SoundZonePopup extends javax.swing.JFrame {
         JFileChooser fc = new JFileChooser();
         fc.setDialogTitle("Choose An  Environmental Audio File For SoundZone " + this.z.getId());
         int returnVal = fc.showOpenDialog(this);
-        System.out.println("val = " + returnVal);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File fTemp = fc.getSelectedFile();
             System.out.println("Mapplet: File chosen = " + fTemp.getName() + ".");
@@ -186,7 +196,6 @@ public class SoundZonePopup extends javax.swing.JFrame {
         JFileChooser fc = new JFileChooser();
         fc.setDialogTitle("Choose A Self-Produced Audio File For SoundZone " + this.z.getId());
         int returnVal = fc.showOpenDialog(this);
-        System.out.println("val = " + returnVal);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File fTemp = fc.getSelectedFile();
             System.out.println("Mapplet: File chosen = " + fTemp.getName() + ".");
@@ -203,6 +212,14 @@ public class SoundZonePopup extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider1StateChanged
+        
+        JSlider source = (JSlider) evt.getSource();
+        int val = source.getValue();
+        System.out.println("Size slider changed to: "+val);
+        z.setZoneSize(val);
+    }//GEN-LAST:event_jSlider1StateChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

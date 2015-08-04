@@ -165,6 +165,16 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JSlider" name="jSlider1">
+      <Properties>
+        <Property name="maximum" type="int" value="200"/>
+        <Property name="minimum" type="int" value="10"/>
+        <Property name="value" type="int" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="z.getZoneSize()&#xd;&#xa;" type="code"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jSlider1StateChanged"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>

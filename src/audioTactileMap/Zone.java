@@ -33,21 +33,6 @@ class Zone {
         minim = new Minim(parent);
 
         System.out.println("Zone #" + zoneID + " checking for audio file...");
-//        if ("none".equals(soundFiles)) {
-//            System.out.println("No associated audio file found for building name. ");
-//
-//        } else {
-//            System.out.println("Zone #" + zoneID + " loading audio file: " + soundFiles);
-//            minim = new Minim(parent);
-//            sound1 = minim.loadFile(soundFiles);
-//        }
-//        if ("none".equals(sound2File)) {
-//            
-//
-//        } else {
-//            System.out.println("Zone #" + zoneID + " loading audio file: " + sound2File);
-//            sound2 = minim.loadFile(sound2File);
-//        }
 
         for (int i = 0; i < soundFilePaths.size(); i += 1) {
             if (new File(soundFilePaths.get(i)).exists()) {
@@ -77,15 +62,15 @@ class Zone {
         return soundFiles;
 
     }
-    
 
     void setSoundFile1Path(File f_) {
-        //TODO if accessor needed
-
+        System.out.println("Zone #" + zoneID + " Set soundfile 1 to: " + f_.getName());
+        soundFilePaths.set(0, f_.toString());
     }
-    
+
     void setSoundFile2Path(File f_) {
-        //TODO if accessor needed
+        System.out.println("Zone #" + zoneID + " Set soundfile 2 to: " + f_.getName());
+        soundFilePaths.set(1, f_.toString());
 
     }
 

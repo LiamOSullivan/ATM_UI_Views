@@ -206,7 +206,9 @@ public class ATMModel extends PApplet {
     }
 
     void saveFile() throws IOException {
-
+        
+        System.out.println("Save to: " + openFilePath);
+        writeXMLFile(openFilePath); //write changes to the current XML file
     }
 
     void saveFileAs(File f_) throws IOException {
@@ -260,7 +262,7 @@ public class ATMModel extends PApplet {
                 String newFilePath = saveFilePath + "//" + file.getName() + ".xml";
                 System.out.println("Creating file: " + newFilePath);
                 writeXMLFile(newFilePath);
-
+                
             } else {
                 System.out.println("Could not create path: " + file.getPath());
             }
@@ -308,7 +310,7 @@ public class ATMModel extends PApplet {
         } else if (isModelLoaded) {
             println("Saving xml file to " + newFileP);
             XML newXML = updateXML(openFilePath);
-            saveXML(newXML, newFileP);
+            saveXML(newXML, openFilePath);
         }
     }
 
