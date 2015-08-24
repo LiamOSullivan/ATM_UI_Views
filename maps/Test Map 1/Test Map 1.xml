@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<atm>
+  <mapImage filename="CampusMap_1.png"/>
+  <soundzones>
+    <soundzone envfile="1.wav" id="0" selffile="none" size="25" xPos="90" yPos="17"/>
+    <soundzone envfile="2.wav" id="1" selffile="none" size="25" xPos="327" yPos="95"/>
+    <soundzone envfile="3.wav" id="2" selffile="none" size="25" xPos="174" yPos="141"/>
+    <soundzone envfile="4.wav" id="3" selffile="none" size="25" xPos="242" yPos="169"/>
+    <soundzone envfile="5.wav" id="4" selffile="none" size="25" xPos="296" yPos="227"/>
+    <soundzone envfile="6.wav" id="5" selffile="none" size="25" xPos="186" yPos="265"/>
+    <soundzone envfile="7.wav" id="6" selffile="none" size="25" xPos="214" yPos="323"/>
+    <soundzone envfile="8.wav" id="7" selffile="none" size="25" xPos="137" yPos="291"/>
+    <soundzone envfile="9.wav" id="8" selffile="none" size="25" xPos="67" yPos="263"/>
+    <soundzone envfile="10.wav" id="9" selffile="none" size="25" xPos="42" yPos="335"/>
+  </soundzones>
+  <zones>
+    <zone centroidX="-1.0" centroidY="-1.0" id="-1" info="There is no additional information for this zone." infoaudiofile="none" label="585" name="Art Factory (Art, Design and Humanities)" nameaudiofile="Art.wav"/>
+    <zone centroidX="-1.0" centroidY="-1.0" id="-1" info="There is no additional information for this zone." infoaudiofile="none" label="653" name="Campus Centre incorporating De Montfort Students' Union" nameaudiofile="Campus.wav"/>
+    <zone centroidX="-1.0" centroidY="-1.0" id="-1" info="There is no additional information for this zone." infoaudiofile="none" label="222" name="Chantry Building" nameaudiofile="Chantry.wav"/>
+    <zone centroidX="-1.0" centroidY="-1.0" id="-1" info="There is no additional information for this zone." infoaudiofile="none" label="504" name="Clephan Building" nameaudiofile="Clephan.wav"/>
+    <zone centroidX="-1.0" centroidY="-1.0" id="-1" info="There is no additional information for this zone." infoaudiofile="none" label="661" name="Eric Wood Building" nameaudiofile="Eric.wav"/>
+    <zone centroidX="-1.0" centroidY="-1.0" id="-1" info="There is no additional information for this zone." infoaudiofile="none" label="514" name="Estate Development Building" nameaudiofile="EstateDev.wav"/>
+    <zone centroidX="-1.0" centroidY="-1.0" id="-1" info="Includes Security Office" infoaudiofile="none" label="875" name="Estates Services Building" nameaudiofile="EstateServ.wav"/>
+    <zone centroidX="-1.0" centroidY="-1.0" id="-1" info="Art, Design and Humanities." infoaudiofile="none" label="462" name="Fletcher Building" nameaudiofile="Fletcher.wav"/>
+    <zone centroidX="-1.0" centroidY="-1.0" id="-1" info="Art, Design and Humanities." infoaudiofile="none" label="505" name="Fletcher Building" nameaudiofile="Fletcher.wav"/>
+    <zone centroidX="-1.0" centroidY="-1.0" id="-1" info="Art, Design and Humanities." infoaudiofile="none" label="555" name="Fletcher Building" nameaudiofile="Fletcher.wav"/>
+    <zone centroidX="-1.0" centroidY="-1.0" id="-1" info="Technology, Cashier and Student Gateway." infoaudiofile="none" label="715" name="Gateway House" nameaudiofile="Gateway.wav"/>
+    <zone centroidX="-1.0" centroidY="-1.0" id="-1" info="Health and Life Sciences." infoaudiofile="none" label="363" name="Hawthorn Building" nameaudiofile="Hawthorn.wav"/>
+    <zone centroidX="-1.0" centroidY="-1.0" id="-1" info="Business and Law." infoaudiofile="none" label="386" name="Hugh Aston Building" nameaudiofile="Hugh.wav"/>
+    <zone centroidX="-1.0" centroidY="-1.0" id="-1" info="There is no additional information for this zone." infoaudiofile="none" label="675" name="Innovation Center" nameaudiofile="zInnovation.wav"/>
+    <zone centroidX="-1.0" centroidY="-1.0" id="-1" info="There is no additional information for this zone." infoaudiofile="none" label="734" name="Confucius Institute and Kimberlin Library" nameaudiofile="Kimberlin.wav"/>
+    <zone centroidX="-1.0" centroidY="-1.0" id="-1" info="Exams and Academic Awards and Graduate School Office." infoaudiofile="none" label="26" name="John Whitehead Building" nameaudiofile="John.wav"/>
+    <zone centroidX="-1.0" centroidY="-1.0" id="-1" info="Leicestershire Chamber of Commerce and the Centre for English Language Learning." infoaudiofile="none" label="504" name="Main Building" nameaudiofile="none"/>
+    <zone centroidX="-1.0" centroidY="-1.0" id="-1" info="Art, Design and Humanities." infoaudiofile="none" label="517" name="Mill Studios" nameaudiofile="Mill.wav"/>
+    <zone centroidX="-1.0" centroidY="-1.0" id="-1" info="Private hall of residence." infoaudiofile="none" label="585" name="Newarke Point" nameaudiofile="Newarke.wav"/>
+    <zone centroidX="-1.0" centroidY="-1.0" id="-1" info="There is no additional information for this zone." infoaudiofile="none" label="333" name="Portland Building" nameaudiofile="Portland.wav"/>
+    <zone centroidX="-1.0" centroidY="-1.0" id="-1" info="Technology." infoaudiofile="none" label="654" name="Queens Building" nameaudiofile="Queens.wav"/>
+    <zone centroidX="-1.0" centroidY="-1.0" id="-1" info="Technology." infoaudiofile="none" label="657" name="Queens Building" nameaudiofile="Queens.wav"/>
+    <zone centroidX="-1.0" centroidY="-1.0" id="-1" info="There is no additional information for this zone." infoaudiofile="none" label="507" name="Transdisciplinary Common Room" nameaudiofile="Transdisciplinary.wav"/>
+    <zone centroidX="-1.0" centroidY="-1.0" id="-1" info="There is no additional information for this zone." infoaudiofile="none" label="585" name="Trinity House" nameaudiofile="Trinity.wav"/>
+  </zones>
+  <settings>
+    <oscaddress ip="127.0.0.1"/>
+    <path defaultdir="C:\Users\Administrator\Documents\My ATM Files" envsounddir="\sounds\environment\" imagedir="\images\" selfsounddir="\sounds\self-produced\" spokensounddir="\sounds\spoken\"/>
+  </settings>
+</atm>
